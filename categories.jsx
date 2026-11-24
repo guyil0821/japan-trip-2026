@@ -1,0 +1,3 @@
+import { Plane, Hotel, Train, ShieldCheck, Wifi, Ticket, ShoppingBag, CircleEllipsis, Utensils, Coffee, Bus, Gift } from "lucide-react";
+import { ShoppingBag as ShopIcon } from "lucide-react";
+export const categories = { pre: [{ n: "机票", Icon: Plane }, { n: "酒店", Icon: Hotel }, { n: "JR Pass / 车票", Icon: Train }, { n: "签证 / 保险", Icon: ShieldCheck }, { n: "电话卡 / eSIM", Icon: Wifi }, { n: "门票 / 预约", Icon: Ticket }, { n: "行前购物", Icon: ShoppingBag }, { n: "其他", Icon: CircleEllipsis }], trip: [{ n: "餐饮", Icon: Utensils }, { n: "咖啡 / 小吃", Icon: Coffee }, { n: "交通", Icon: Train }, { n: "巴士", Icon: Bus }, { n: "购物", Icon: ShopIcon }, { n: "伴手礼", Icon: Gift }, { n: "门票 / 体验", Icon: Ticket }, { n: "其他", Icon: CircleEllipsis }] };
