@@ -1,0 +1,26 @@
+export const flights = [
+  {
+    flightNumber: "JL876",
+    date: "2026/12/16",
+    origin: "上海",
+    originAirport: "待填写",
+    originTerminal: "待填写",
+    departureTime: "",
+    destination: "东京成田",
+    destinationAirport: "NRT",
+    destinationTerminal: "待填写",
+    arrivalTime: "",
+  },
+  {
+    flightNumber: "JL873",
+    date: "2026/12/23",
+    origin: "东京成田",
+    originAirport: "NRT",
+    originTerminal: "待填写",
+    departureTime: "",
+    destination: "上海",
+    destinationAirport: "待填写",
+    destinationTerminal: "待填写",
+    arrivalTime: "",
+  },
+];
