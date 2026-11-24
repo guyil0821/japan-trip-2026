@@ -1,0 +1,85 @@
+export const preTripChecklist = [
+  {
+    id: "communication",
+    title: "通讯",
+    items: [
+      { id: "japan-roaming", text: "确认手机已开通日本国际漫游" },
+      { id: "esim-or-sim", text: "或已购买日本 eSIM / 电话卡" },
+      { id: "data-plan", text: "确认流量套餐和激活方式" },
+      { id: "esim-qr", text: "保存 eSIM QR Code" },
+    ],
+  },
+  {
+    id: "entry",
+    title: "入境",
+    items: [
+      { id: "visit-japan-web", text: "完成 Visit Japan Web" },
+      { id: "passport-details", text: "登记护照信息" },
+      { id: "entry-plan", text: "登记日本入境计划" },
+      { id: "immigration", text: "完成入境审查信息" },
+      { id: "customs", text: "完成海关申报" },
+      { id: "entry-qr", text: "保存相关二维码" },
+    ],
+  },
+  {
+    id: "insurance",
+    title: "保险",
+    items: [
+      { id: "travel-insurance", text: "已购买日本旅行保险" },
+      { id: "medical-accident", text: "确认医疗 / 意外保障" },
+      { id: "baggage-cover", text: "确认行李延误 / 丢失保障" },
+      { id: "policy-copy", text: "保存电子保单" },
+      { id: "emergency-phone", text: "保存保险公司紧急联系电话" },
+    ],
+  },
+  {
+    id: "payments",
+    title: "支付",
+    items: [
+      { id: "yen-cash", text: "准备日元现金" },
+      { id: "card-acceptance", text: "确认 Visa / Mastercard 日本可用" },
+      { id: "overseas-payments", text: "开启信用卡境外支付" },
+      { id: "suica", text: "准备 Suica" },
+      { id: "apple-pay", text: "检查 Apple Pay" },
+    ],
+  },
+  {
+    id: "transport",
+    title: "交通",
+    items: [
+      { id: "rail-pass", text: "确认 JR EAST–SOUTH HOKKAIDO RAIL PASS" },
+      { id: "shinkansen-reservations", text: "确认新干线指定席" },
+      { id: "tokyo-shin-aomori", text: "检查 12/17 东京 → 新青森" },
+      { id: "aomori-hakodate", text: "检查 12/18 青森 ↔ 函馆" },
+      { id: "hayabusa-38", text: "检查 12/19 Hayabusa 38" },
+      { id: "offline-maps", text: "下载 Google Maps 离线地图" },
+    ],
+  },
+  {
+    id: "documents",
+    title: "文件",
+    items: [
+      { id: "passport", text: "护照" },
+      { id: "identity-card", text: "身份证" },
+      { id: "flight-booking", text: "航班订单" },
+      { id: "hotel-booking", text: "酒店订单" },
+      { id: "rail-pass-documents", text: "JR Pass / 交通凭证" },
+      { id: "insurance-documents", text: "旅行保险电子保单" },
+      { id: "visit-japan-documents", text: "Visit Japan Web" },
+      { id: "offline-documents", text: "重要文件离线副本" },
+    ],
+  },
+  {
+    id: "final-checks",
+    title: "最后检查",
+    items: [
+      { id: "iphone-charged", text: "iPhone 充满" },
+      { id: "watch-charged", text: "Apple Watch 充满" },
+      { id: "power-bank-charged", text: "充电宝充满" },
+      { id: "japan-weather", text: "检查日本天气" },
+      { id: "aomori-snow-transport", text: "检查青森 / 八甲田积雪和交通" },
+      { id: "jr-status", text: "检查 JR 运行状态" },
+      { id: "luggage-weight", text: "检查行李重量" },
+    ],
+  },
+];
