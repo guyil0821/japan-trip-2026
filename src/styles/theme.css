@@ -146,6 +146,33 @@ body { color: var(--text-primary); }
 .today-quick-action { min-width: 0; padding: 10px; text-align: left; background: var(--paper); color: var(--forest-900); }
 .today-story { font-family: var(--font-story); }
 
+/* Trip tab: compact, consistent cards with a distinct date/header hierarchy. */
+.itineraryPageContent { width: 100%; max-width: 720px; margin-left: auto; margin-right: auto; }
+.ios-content .itineraryCardList { display: flex; flex-direction: column; gap: 8px; padding: 0 10px calc(100px + env(safe-area-inset-bottom)); }
+.ios-content .itineraryMiniCard {
+  width: 100%; min-width: 0; height: auto; box-sizing: border-box; overflow: hidden;
+  padding: 12px 14px; color: #405249;
+  background: rgba(255,253,246,.82); border: 1px solid rgba(83,107,95,.10); border-radius: 16px; box-shadow: none;
+}
+.ios-content .itineraryMiniCard.bento-day--featured { background: rgba(255,253,246,.82); }
+.itineraryCardHeader { display: flex; align-items: center; justify-content: space-between; width: 100%; min-width: 0; gap: 10px; margin-bottom: 10px; }
+.itineraryDateGroup { display: flex; align-items: center; min-width: 0; gap: 10px; }
+.dayBadge { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; padding: 4px 7px; border-radius: 6px; background: rgba(91,116,102,.14); color: #5c7166; font-size: 11px; line-height: 1; font-weight: 500; letter-spacing: .045em; white-space: nowrap; }
+.itineraryDate { flex-shrink: 0; color: #34473e; font-size: 16px; line-height: 1; font-weight: 700; letter-spacing: .01em; white-space: nowrap; }
+.scheduleToggle { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: flex-end; gap: 4px; margin-left: auto; padding: 4px 0; border: 0; outline: none; background: transparent; color: #6b8075; font-family: inherit; font-size: 12px; line-height: 1.2; font-weight: 500; white-space: nowrap; cursor: pointer; }
+.scheduleToggle:active { opacity: .65; }
+.toggleChevron { display: inline-block; flex: 0 0 auto; transition: transform 180ms ease; }
+.toggleChevron.expanded { transform: rotate(180deg); }
+.itineraryCardBody { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.itineraryRoute { display: flex; align-items: flex-start; gap: 6px; min-width: 0; color: #40544a; font-size: 14px; line-height: 1.4; font-weight: 500; }
+.routeIcon { flex: 0 0 auto; margin-top: 2px; color: #70887b; }
+.routeText { min-width: 0; font-weight: 500; overflow-wrap: anywhere; }
+.itinerarySummary { display: -webkit-box; overflow: hidden; padding-left: 20px; color: #697970; font-size: 13px; line-height: 1.45; font-weight: 400; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.itineraryExpandedContent { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(83,107,95,.10); font-size: 13px; line-height: 1.55; font-weight: 400; }
+.ios-content .itineraryExpandedContent p { display: flex; align-items: flex-start; gap: 9px; margin: 0; padding: 7px 0; color: #50675d; font-size: 13px; line-height: 1.55; font-weight: 400; }
+.ios-content .itineraryExpandedContent p + p { border-top: 1px solid rgba(83,107,95,.08); }
+.ios-content .itineraryExpandedContent p span { flex: 0 0 auto; color: #8a9a8f; font-size: 11px; font-weight: 400; }
+
 @media (max-width: 700px) {
   .ios-header-inner { width: calc(100% - 28px); min-height: 68px; }
   .ios-main { width: calc(100% - 24px); padding-top: 18px; padding-bottom: 30px; }
@@ -159,6 +186,26 @@ body { color: var(--text-primary); }
   .ios-bottom-nav { right: 7px; left: 7px; width: calc(100% - 14px); padding-right: 3px; padding-left: 3px; }
   .ios-bottom-nav button svg { width: 17px; height: 17px; }
   .ios-bottom-nav button span { font-size: 8px; }
+}
+@media (max-width: 430px) {
+  .ios-content .itineraryMiniCard { padding: 11px 12px; border-radius: 14px; }
+  .itineraryCardHeader { gap: 8px; margin-bottom: 9px; }
+  .itineraryDateGroup { gap: 8px; }
+  .dayBadge { padding: 4px 6px; font-size: 10.5px; }
+  .itineraryDate { font-size: 15px; }
+  .scheduleToggle { font-size: 11.5px; }
+  .itineraryRoute { font-size: 13.5px; }
+  .itinerarySummary { font-size: 12.5px; }
+}
+@media (max-width: 360px) {
+  .ios-content .itineraryMiniCard { padding-left: 11px; padding-right: 11px; }
+  .itineraryCardHeader { gap: 6px; }
+  .itineraryDateGroup { gap: 6px; }
+  .dayBadge { padding-left: 5px; padding-right: 5px; }
+  .scheduleToggle { gap: 2px; }
+}
+@media (max-width: 700px) {
+  .ios-bottom-nav { right: 7px; left: 7px; width: calc(100% - 14px); padding-right: 3px; padding-left: 3px; }
 }
 @media (max-width: 360px) {
   .today-top-grid, .today-finance-grid { grid-template-columns: minmax(0, 1.2fr) minmax(105px, .8fr); }
