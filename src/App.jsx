@@ -10,22 +10,24 @@ import PrepPage from "./pages/PrepPage";
 import TodayPage from "./pages/TodayPage";
 import TopTabs from "./components/TopTabs";
 import BottomNavigation from "./components/BottomNavigation";
-import useExpenseLedger from "./hooks/useExpenseLedger";
+import useLocalStorage from "./hooks/useLocalStorage";
+import { entryCny } from "./utils/currency";
 
 export default function App() {
   const [open, setOpen] = useState("12/20"), [tab, setTab] = useState("trip");
-  const ledger = useExpenseLedger();
+  const [entries] = useLocalStorage("sybil-japan-ledger", []);
+  const grandTotal = entries.reduce((sum, entry) => sum + entryCny(entry), 0);
 
-  return <div className="min-h-screen bg-[#f7f5f1] pb-28 text-slate-900"><header className="sticky top-0 z-30 border-b border-black/5 bg-[#f7f5f1]/90 backdrop-blur-xl"><div className="mx-auto flex max-w-3xl justify-between px-4 py-3"><div><div className="text-[11px] uppercase tracking-widest text-slate-500">Japan · Dec 2026</div><h1 className="font-semibold">Sybil 的日本旅行</h1></div><Snowflake className="h-5 w-5 text-sky-600" /></div></header>
+  return <div className="min-h-screen bg-[#f7f5f1] pb-28 text-slate-900"><header className="sticky top-0 z-30 border-b border-black/5 bg-[#f7f5f1]/90 backdrop-blur-xl"><div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3"><div><div className="text-[11px] uppercase tracking-widest text-slate-500">Japan · Dec 2026</div><h1 className="font-semibold">Sybil 的日本旅行</h1></div><Snowflake className="h-5 w-5 text-sky-600" /></div></header>
     <main className="mx-auto max-w-3xl px-4 pt-5"><TopTabs tab={tab} setTab={setTab} />
       {tab === "trip" && <TripPage open={open} setOpen={setOpen} />}
       {tab === "run" && <RunningRoute />}
-      {tab === "budget" && <BudgetPage grandTotal={ledger.grandTotal} />}
-      {tab === "ledger" && <LedgerPage {...ledger} />}
+      {tab === "budget" && <BudgetPage grandTotal={grandTotal} />}
+      {tab === "ledger" && <LedgerPage />}
       {tab === "transport" && <TransportPage />}
       {tab === "stay" && <StayPage setTab={setTab} />}
       {tab === "prep" && <PrepPage />}
-      {tab === "today" && <TodayPage setTab={setTab} grandTotal={ledger.grandTotal} />}
+      {tab === "today" && <TodayPage setTab={setTab} grandTotal={grandTotal} />}
     </main><BottomNavigation tab={tab} setTab={setTab} />
   </div>;
 }
