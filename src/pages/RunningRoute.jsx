@@ -20,6 +20,10 @@ const ROUTE_COLORS = {
   hotel: "#A88865",
 };
 
+const MAP_LAYOUT = { outerInset: 6, labelWidth: 24, routeLeft: 34, routeRight: 66 };
+const MAP_LAYOUT_MOBILE = { outerInset: 3, labelWidth: 27, routeLeft: 33, routeRight: 67 };
+const ROUTE_Y = { topBridge: 22, asakusa: 27, terrace: 51, kuramae: 42, ryogokuEast: 60, bottomBridge: 73, hotel: 81 };
+
 const hotel = "THE GATE HOTEL RYOGOKU by HULIC, Tokyo";
 const routeStops = [
   "THE GATE HOTEL RYOGOKU by HULIC（両国・りょうごく）",
@@ -42,65 +46,110 @@ function RouteLegend() {
   </div>;
 }
 
-function RouteNode({ type = "outbound", important = false }) {
+function RouteNode({ type = "outbound", important = false, style = {} }) {
   const color = type === "return" ? ROUTE_COLORS.return : ROUTE_COLORS.outbound;
-  return <span className={`route-sketch-node ${important ? "is-important" : ""}`} style={{ borderColor: color }} aria-hidden="true" />;
+  return <span className={`route-sketch-node ${important ? "is-important" : ""}`} style={{ ...style, borderColor: color }} aria-hidden="true" />;
 }
 
-function MapLabel({ title, kana, english, align = "left", accent = false }) {
-  return <div className={`route-sketch-label ${align === "right" ? "is-right" : "is-left"}`}>
-    <div className={`route-sketch-label-title ${accent ? "is-accent" : ""}`}>{title}</div>
-    {kana && <div className="route-sketch-label-kana">{kana}</div>}
-    {english && <div className="route-sketch-label-english">{english}</div>}
+function MapLocation({ side, top, title, kana, english, Icon, iconColor = ROUTE_COLORS.tree }) {
+  const isLeft = side === "left";
+  return <div
+    className={`route-sketch-location ${isLeft ? "is-left" : "is-right"}`}
+    style={{
+      top,
+      ...(isLeft
+        ? { left: `${MAP_LAYOUT.outerInset}%`, width: `${MAP_LAYOUT.labelWidth}%` }
+        : { right: `${MAP_LAYOUT.outerInset}%`, width: `${MAP_LAYOUT.labelWidth}%` }),
+    }}
+  >
+    {Icon && <span className="route-sketch-location-icon"><Icon style={{ color: iconColor }} /></span>}
+    <div className="route-sketch-location-copy">
+      <div className="route-sketch-location-title">{title}</div>
+      {kana && <div className="route-sketch-location-kana">{kana}</div>}
+      {english && <div className="route-sketch-location-english">{english}</div>}
+    </div>
   </div>;
 }
 
 function RouteSketch() {
-  return <section className="route-sketch-card" aria-label="ROUTE SKETCH / 两岸闭环示意">
+  const canvasStyle = {
+    "--map-outer-inset": `${MAP_LAYOUT.outerInset}%`,
+    "--map-label-width": `${MAP_LAYOUT.labelWidth}%`,
+    "--map-route-left": `${MAP_LAYOUT.routeLeft}%`,
+    "--map-route-right": `${MAP_LAYOUT.routeRight}%`,
+    "--route-outbound": ROUTE_COLORS.outbound,
+    "--route-outbound-soft": ROUTE_COLORS.outboundSoft,
+    "--route-return": ROUTE_COLORS.return,
+    "--route-return-soft": ROUTE_COLORS.returnSoft,
+    "--route-river": ROUTE_COLORS.river,
+    "--route-river-text": ROUTE_COLORS.riverText,
+    "--route-paper": ROUTE_COLORS.paper,
+    "--route-text": ROUTE_COLORS.text,
+    "--route-muted": ROUTE_COLORS.muted,
+    "--route-faint": ROUTE_COLORS.faint,
+    "--route-bridge": ROUTE_COLORS.bridge,
+    "--route-tree": ROUTE_COLORS.tree,
+    "--route-hotel": ROUTE_COLORS.hotel,
+  };
+
+  const routeX = { west: 340, east: 660 };
+  const routeY = value => value * 10;
+
+  return <section className="route-sketch-card" style={canvasStyle} aria-label="ROUTE SKETCH / 两岸闭环示意">
     <div className="route-sketch-header">
-      <div>
-        <p>ROUTE SKETCH</p>
-        <h3>两岸闭环示意</h3>
-      </div>
+      <div><p>ROUTE SKETCH</p><h3>两岸闭环示意</h3></div>
       <RouteLegend />
     </div>
 
     <div className="route-sketch-canvas" role="img" aria-label="概念路线示意：两国酒店沿东岸经过两国、藏前、驹形桥，在吾妻桥过河至西岸，经浅草和隅田川河畔到两国桥，再返回酒店">
-      <div className="route-sketch-bank-title route-sketch-west-title">WEST BANK <span>西岸 · 台東区</span></div>
-      <div className="route-sketch-bank-title route-sketch-east-title">EAST BANK <span>東岸 · 墨田区</span></div>
+      <div className="route-sketch-bank-title route-sketch-west-title"><p>WEST BANK</p><span>西岸 · 台东区</span></div>
+      <div className="route-sketch-bank-title route-sketch-east-title"><p>EAST BANK</p><span>东岸 · 墨田区</span></div>
 
       <div className="route-sketch-river" />
       <div className="route-sketch-river-dash" />
       <div className="route-sketch-river-name">隅田川 · SUMIDA RIVER</div>
 
-      <svg className="route-sketch-lines" viewBox="0 0 1000 400" preserveAspectRatio="none" aria-hidden="true">
-        {/* Soft bridge decks sit underneath the walking paths. */}
-        <path d="M340 88 H660" stroke={ROUTE_COLORS.bridge} strokeWidth="11" opacity=".25" strokeLinecap="round" />
-        <path d="M340 310 H660" stroke={ROUTE_COLORS.bridge} strokeWidth="11" opacity=".25" strokeLinecap="round" />
-        {/* Outbound: hotel → east bank → Komagata Bridge → Azuma Bridge crossing. */}
-        <path d="M660 360 L660 250 L660 190 L660 140 L660 88 H340" fill="none" stroke={ROUTE_COLORS.outbound} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-        {/* Return: west bank river walk → Ryogoku Bridge → hotel. */}
-        <path d="M340 88 L340 150 L340 220 L340 270 L340 310 H660 L660 360" fill="none" stroke={ROUTE_COLORS.return} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-        {/* Quiet direction chevrons (no large arrowheads). */}
-        <path d="M654 165 l6 -6 6 6" fill="none" stroke={ROUTE_COLORS.outboundSoft} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M346 245 l-6 6 -6 -6" fill="none" stroke={ROUTE_COLORS.returnSoft} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        {/* Slow moving direction markers follow the corresponding route colors. */}
+      <svg className="route-sketch-lines" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
+        {/* Soft bridge decks below the routes. */}
+        <path d={`M${routeX.west} ${routeY(ROUTE_Y.topBridge)} H${routeX.east}`} stroke={ROUTE_COLORS.bridge} strokeWidth="26" opacity=".25" strokeLinecap="round" />
+        <path d={`M${routeX.west} ${routeY(ROUTE_Y.bottomBridge)} H${routeX.east}`} stroke={ROUTE_COLORS.bridge} strokeWidth="26" opacity=".25" strokeLinecap="round" />
+        {/* Outbound: hotel north on the east bank, then cross west at Azuma Bridge. */}
+        <path d={`M${routeX.east} ${routeY(ROUTE_Y.hotel)} L${routeX.east} ${routeY(ROUTE_Y.ryogokuEast)} L${routeX.east} ${routeY(ROUTE_Y.kuramae)} L${routeX.east} ${routeY(ROUTE_Y.topBridge)} H${routeX.west} L${routeX.west} ${routeY(ROUTE_Y.asakusa)}`} fill="none" stroke={ROUTE_COLORS.outbound} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+        {/* Return: west bank walk south to Ryogoku Bridge, cross and reconnect to hotel. */}
+        <path d={`M${routeX.west} ${routeY(ROUTE_Y.asakusa)} L${routeX.west} ${routeY(ROUTE_Y.terrace)} L${routeX.west} ${routeY(ROUTE_Y.bottomBridge)} H${routeX.east} L${routeX.east} ${routeY(ROUTE_Y.hotel)}`} fill="none" stroke={ROUTE_COLORS.return} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <path d={`M${routeX.east - 6} ${routeY(ROUTE_Y.kuramae) + 10} l6 -6 6 6`} fill="none" stroke={ROUTE_COLORS.outboundSoft} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d={`M${routeX.west + 6} ${routeY(ROUTE_Y.terrace) + 10} l-6 6 -6 -6`} fill="none" stroke={ROUTE_COLORS.returnSoft} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         <motion.circle r="5" fill={ROUTE_COLORS.outbound}
-          animate={{ cx: [660, 660, 660, 660, 340], cy: [360, 250, 190, 140, 88] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "linear" }} />
+          animate={{ cx: [routeX.east, routeX.east, routeX.east, routeX.east, routeX.west, routeX.west], cy: [routeY(ROUTE_Y.hotel), routeY(ROUTE_Y.ryogokuEast), routeY(ROUTE_Y.kuramae), routeY(ROUTE_Y.topBridge), routeY(ROUTE_Y.topBridge), routeY(ROUTE_Y.asakusa)] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "linear" }} />
         <motion.circle r="4" fill={ROUTE_COLORS.return}
-          animate={{ cx: [340, 340, 340, 340, 660, 660], cy: [88, 150, 220, 310, 310, 360] }}
-          transition={{ duration: 9, repeat: Infinity, ease: "linear", delay: 1 }} />
+          animate={{ cx: [routeX.west, routeX.west, routeX.west, routeX.east, routeX.east], cy: [routeY(ROUTE_Y.asakusa), routeY(ROUTE_Y.terrace), routeY(ROUTE_Y.bottomBridge), routeY(ROUTE_Y.bottomBridge), routeY(ROUTE_Y.hotel)] }}
+          transition={{ duration: 11, repeat: Infinity, ease: "linear", delay: 1 }} />
       </svg>
 
-      {/* Every location label is anchored beside its corresponding route node. */}
-      <div className="route-sketch-point route-sketch-point--asakusa"><RouteNode type="return" /><Landmark className="route-sketch-icon route-sketch-icon--landmark" /><MapLabel title="浅草・雷门" kana="あさくさ・かみなりもん" english="Asakusa · Kaminarimon" /></div>
-      <div className="route-sketch-point route-sketch-point--komagata"><RouteNode /><MapLabel title="驹形桥" kana="こまがたばし" english="Komagata Bridge" /></div>
-      <div className="route-sketch-point route-sketch-point--terrace"><RouteNode type="return" /><Trees className="route-sketch-icon route-sketch-icon--tree" /><MapLabel title="隅田川テラス" kana="すみだがわ" english="Sumida River Terrace" /></div>
-      <div className="route-sketch-point route-sketch-point--kuramae"><RouteNode /><MapLabel title="藏前" kana="くらまえ" english="Kuramae" /></div>
-      <div className="route-sketch-point route-sketch-point--ryogoku"><RouteNode /><MapLabel title="两国" kana="りょうごく" english="隅田川东岸 · 去程" /></div>
-      <div className="route-sketch-point route-sketch-point--ryogoku-bridge"><RouteNode type="return" /><MapLabel title="两国桥" kana="りょうごくばし" english="过河 · 回到西岸" /></div>
-      <div className="route-sketch-point route-sketch-point--hotel"><RouteNode important /><span className="route-sketch-hotel-icon"><House /></span><MapLabel title="两国酒店" kana="りょうごく" english="Hotel · 起点 / 终点" accent /></div>
+      {/* Symmetric bank headings use the same inset and label width as location rows. */}
+      <div className="route-sketch-bank-title route-sketch-west-title"><p>WEST BANK</p><span>西岸 · 台东区</span></div>
+      <div className="route-sketch-bank-title route-sketch-east-title"><p>EAST BANK</p><span>东岸 · 墨田区</span></div>
+
+      {/* Route nodes are separate geographic points, aligned to shared ROUTE_Y coordinates. */}
+      <RouteNode type="outbound" style={{ left: `${MAP_LAYOUT.routeRight}%`, top: `${ROUTE_Y.topBridge}%` }} />
+      <RouteNode type="return" style={{ left: `${MAP_LAYOUT.routeLeft}%`, top: `${ROUTE_Y.topBridge}%` }} />
+      <RouteNode type="return" style={{ left: `${MAP_LAYOUT.routeLeft}%`, top: `${ROUTE_Y.asakusa}%` }} />
+      <RouteNode type="return" style={{ left: `${MAP_LAYOUT.routeLeft}%`, top: `${ROUTE_Y.terrace}%` }} />
+      <RouteNode style={{ left: `${MAP_LAYOUT.routeRight}%`, top: `${ROUTE_Y.kuramae}%` }} />
+      <RouteNode style={{ left: `${MAP_LAYOUT.routeRight}%`, top: `${ROUTE_Y.ryogokuEast}%` }} />
+      <RouteNode type="return" style={{ left: `${MAP_LAYOUT.routeLeft}%`, top: `${ROUTE_Y.bottomBridge}%` }} />
+      <RouteNode style={{ left: `${MAP_LAYOUT.routeRight}%`, top: `${ROUTE_Y.bottomBridge}%` }} />
+      <RouteNode important style={{ left: `${MAP_LAYOUT.routeRight}%`, top: `${ROUTE_Y.hotel}%` }} />
+
+      <MapLocation side="left" top={`${ROUTE_Y.asakusa - 3}%`} title="浅草・雷门" kana="あさくさ・かみなりもん" english="Asakusa · Kaminarimon" Icon={Landmark} iconColor={ROUTE_COLORS.hotel} />
+      <MapLocation side="left" top={`${ROUTE_Y.terrace - 3}%`} title="隅田川テラス" kana="すみだがわ" english="Sumida River Terrace" Icon={Trees} iconColor={ROUTE_COLORS.tree} />
+      <MapLocation side="left" top={`${ROUTE_Y.bottomBridge - 1}%`} title="两国桥" kana="りょうごくばし" english="过河 · 回到西岸" />
+
+      <MapLocation side="right" top={`${ROUTE_Y.topBridge - 1}%`} title="驹形桥" kana="こまがたばし" english="Komagata Bridge" />
+      <MapLocation side="right" top={`${ROUTE_Y.kuramae - 3}%`} title="藏前" kana="くらまえ" english="Kuramae" />
+      <MapLocation side="right" top={`${ROUTE_Y.ryogokuEast - 3}%`} title="两国" kana="りょうごく" english="隅田川东岸 · 去程" />
+      <MapLocation side="right" top={`${ROUTE_Y.hotel - 3}%`} title="两国酒店" kana="りょうごく" english="Hotel · 起点 / 终点" Icon={House} iconColor={ROUTE_COLORS.hotel} />
 
       <div className="route-sketch-bridge-label route-sketch-bridge-label--azuma">吾妻橋 <span>あづまばし</span></div>
       <div className="route-sketch-bridge-label route-sketch-bridge-label--ryogoku">两国橋 <span>りょうごくばし</span></div>
@@ -129,7 +178,7 @@ export default function RunningRoute() {
       <p className="mt-2 text-sm leading-relaxed text-slate-600">沿河一岸向北，在吾妻桥（あづまばし）过河；换到另一岸向南，再从两国桥（りょうごくばし）过河回到两国酒店，形成闭环路线。</p>
       <div className="mt-4 flex flex-wrap items-center gap-2 text-xs">
         <span className="rounded-full bg-sky-50 px-3 py-1.5 font-medium text-sky-800">约 4.5 km</span>
-        <span className="text-slate-500">闭环参考距离 · 实际以步道与现场导航为准</span>
+        <span className="text-slate-500">闭环参考距离 · 实际以步道与现��导航为准</span>
       </div>
     </header>
 
