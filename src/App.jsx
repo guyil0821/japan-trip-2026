@@ -6,6 +6,7 @@ import BudgetPage from "./pages/BudgetPage";
 import TransportPage from "./pages/TransportPage";
 import LedgerPage from "./pages/LedgerPage";
 import PrepPage from "./pages/PrepPage";
+import TodayPage from "./pages/TodayPage";
 import TopTabs from "./components/TopTabs";
 import BottomNavigation from "./components/BottomNavigation";
 import useExpenseLedger from "./hooks/useExpenseLedger";
@@ -22,6 +23,7 @@ export default function App() {
       {tab === "ledger" && <LedgerPage {...ledger} />}
       {tab === "transport" && <TransportPage />}
       {tab === "prep" && <PrepPage />}
+      {tab === "today" && <TodayPage setTab={setTab} />}
     </main><BottomNavigation tab={tab} setTab={setTab} />
   </div>;
 }
