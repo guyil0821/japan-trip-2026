@@ -5,7 +5,7 @@ const tabs = [["today", "今日"], ["prep", "准备"], ["trip", "行程"], ["tra
 export default function TopTabs({ tab, setTab }) {
   return <nav className="section-tabs" aria-label="旅行页面导航">
     {tabs.map(([key, label], index) => <button key={key} type="button" onClick={() => setTab(key)} className={`section-tab ${tab === key ? "is-active" : ""}`} aria-current={tab === key ? "page" : undefined}>
-      <span className="tab-index">{index + 1}</span>{label}
+      <span className="tab-index">{String(index + 1).padStart(2, "0")}</span>{label}
     </button>)}
   </nav>;
 }

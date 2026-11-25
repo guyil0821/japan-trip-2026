@@ -14,14 +14,14 @@ import useLocalStorage from "./hooks/useLocalStorage";
 import { entryCny } from "./utils/currency";
 
 const pageCopy = {
-  today: ["TODAY'S LITTLE ADVENTURE", "今天也要元气满满！", "天气、灵感与当日安排，都在这里。"],
-  prep: ["PACKING PARTY", "出发前，准备好啦！", "出发前的准备清单，一项项轻松搞定。"],
-  trip: ["WINTER TRIP · 2026", "冬の日本、ふわっと旅。", "成田出发，一路收集可爱的冬日小确幸。"],
-  transport: ["CHOO-CHOO JOURNAL", "下一站，坐好咯！", "车次、换乘与移动计划，随时查看。"],
-  stay: ["GOOD NIGHT, SWEET DREAMS", "今晚睡得甜甜的。", "酒店信息和入住安排，触手可及。"],
-  run: ["GOOD MORNING, TOKYO", "晨跑也要开心跑！", "东京晨跑路线与沿途的小小发现。"],
-  budget: ["MONEY CHECK", "预算别哭，要乖乖！", "预算一目了然，把余裕留给惊喜。"],
-  ledger: ["TINY TRAVEL LEDGER", "每笔花费都有回忆。", "随手记下旅途花费，回头看也清清楚楚。"],
+  today: ["TODAY'S JOURNEY", "今日の旅。", "天气、灵感与当天安排，井然有序。"],
+  prep: ["BEFORE DEPARTURE", "出发之前。", "按步骤整理准备事项，轻松踏上旅程。"],
+  trip: ["WINTER JOURNEY · 2026", "冬の日本を、ゆるりと。", "成田出发，沿着雪与温泉，收集旅途中的小确幸。"],
+  transport: ["ON THE MOVE", "下一站，继续前行。", "车次、换乘与移动安排，一处查看。"],
+  stay: ["STAY TONIGHT", "今夜の宿。", "酒店位置与入住信息，整理得清清楚楚。"],
+  run: ["TOKYO MORNING RUN", "朝の東京を走る。", "晨跑路线与沿途可看的风景。"],
+  budget: ["TRIP BUDGET", "旅の予算。", "预算与支出保持清醒，也给惊喜留一点余地。"],
+  ledger: ["TRAVEL LEDGER", "旅の記録。", "记下旅途花费，也记下每一笔来过的痕迹。"],
 };
 
 export default function App() {
@@ -36,8 +36,8 @@ export default function App() {
       <header className="site-header sticky top-0 z-30">
         <div className="site-header-inner">
           <a className="brand-lockup" href="#top" aria-label="Sybil Japan Trip 首页" onClick={() => setTab("today")}>
-            <span className="brand-mark"><Compass size={18} strokeWidth={2.2} /></span>
-            <span className="brand-name">旅のしおり<small>SYBIL'S HAPPY JOURNEY</small></span>
+            <span className="brand-mark"><Compass size={18} strokeWidth={1.8} /></span>
+            <span className="brand-name">旅のしおり<small>SYBIL'S JAPAN JOURNAL</small></span>
           </a>
           <div className="header-note"><Snowflake size={14} /> 12.16 — 12.23 <span>·</span> 2026</div>
         </div>
@@ -46,14 +46,14 @@ export default function App() {
 
       <main id="top" className="page-wrap">
         <section className="page-intro" aria-label="当前页面介绍">
-          <div className="cover-meta"><span>TRIP MEMO</span><span>VOL. 01</span><span>✿ JAPAN</span></div>
+          <div className="cover-meta"><span>TRIP NOTE</span><span>VOL. 01</span><span>冬 · JAPAN</span></div>
           <div className="intro-copy">
             <div className="eyebrow"><span />{eyebrow}</div>
             <h1>{title}</h1>
             <p>{subtitle}</p>
           </div>
           <div className="intro-route"><span>成田</span><i /><span>青森</span><i /><span>東京</span><ArrowDownRight size={14} /></div>
-          <div className="cover-caption">LET'S GO! <b>♥</b></div>
+          <div className="cover-caption">WINTER IN JAPAN <b>✿</b></div>
         </section>
 
         <div className="mobile-tabs"><TopTabs tab={tab} setTab={setTab} /></div>
@@ -67,7 +67,7 @@ export default function App() {
           {tab === "prep" && <PrepPage />}
           {tab === "today" && <TodayPage setTab={setTab} grandTotal={grandTotal} />}
         </div>
-        <footer className="page-footer"><span>SYBIL'S HAPPY JOURNEY <i>·</i> WINTER 2026</span><span>楽しく行こうね ♡</span></footer>
+        <footer className="page-footer"><span>SYBIL'S JAPAN JOURNAL <i>·</i> WINTER 2026</span><span>気をつけて、楽しんで。✿</span></footer>
       </main>
       <BottomNavigation tab={tab} setTab={setTab} />
     </div>

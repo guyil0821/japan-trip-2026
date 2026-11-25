@@ -6,7 +6,7 @@ const items = [["today", "今日", Sparkles], ["prep", "准备", ClipboardCheck]
 export default function BottomNavigation({ tab, setTab }) {
   return <nav className="mobile-navigation" aria-label="常用导航">
     {items.map(([key, label, Icon]) => <button type="button" key={key} onClick={() => setTab(key)} className={tab === key ? "is-active" : ""} aria-current={tab === key ? "page" : undefined}>
-      <Icon size={17} strokeWidth={tab === key ? 2.4 : 1.8} /><span>{label}</span>
+      <Icon size={18} strokeWidth={tab === key ? 2 : 1.6} /><span>{label}</span>
     </button>)}
   </nav>;
 }
