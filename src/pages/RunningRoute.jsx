@@ -1,4 +1,135 @@
 import React from "react";
-import { MapPin, ExternalLink } from "lucide-react";
-import { RUN_ROUTE_URL, RUN_EMBED_URL } from "../data/constants";
-export default function RunningRoute() { return <section className="space-y-4"><div className="rounded-2xl bg-slate-950 p-5 text-white"><div className="flex items-center gap-2 text-sm text-slate-300"><MapPin className="h-4 w-4" />两国酒店 → 上野晨跑路线</div><h2 className="mt-2 text-xl font-semibold">THE GATE HOTEL 両国 → 不忍池</h2><p className="mt-2 text-sm text-slate-300">步行路线：酒店 → 蔵前 → 稲荷町 → 上野恩賜公園 → 不忍池</p></div><a href={RUN_ROUTE_URL} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-2xl bg-sky-700 px-4 py-4 font-semibold text-white shadow-sm">🗺️ 打开 Google Maps 跑步路线（步行）<ExternalLink className="h-5 w-5" /></a><div className="overflow-hidden rounded-2xl border bg-white"><iframe title="Google Maps 步行跑步路线" src={RUN_EMBED_URL} className="h-72 w-full border-0" loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen /></div><div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950"><p>单程到不忍池约为路线前半程。Apple Watch 累计约 4 km 时折返，原路返回酒店，目标总里程约 8 km。</p><p className="mt-2 text-xs">打开地图会显示步行路线；如需开始逐向导航，请在 Google Maps 中确认路线后点击“开始”。</p></div><div className="rounded-2xl border bg-white p-4"><h3 className="font-semibold">沿途补给</h3><p className="mt-1 text-sm text-slate-500">路线附近可留意便利店、自动售货机及公园内饮水点；营业和设施情况以当天现场为准。</p></div></section>; }
+import { ArrowDownLeft, ArrowLeftRight, ArrowUpRight, ExternalLink, MapPin, Waves } from "lucide-react";
+
+const hotel = "THE GATE HOTEL RYOGOKU by HULIC, Tokyo";
+const routeStops = [
+  "THE GATE HOTEL RYOGOKU by HULIC",
+  "Ryogoku River Terrace",
+  "Kuramae Bridge, Tokyo",
+  "Komagata Bridge, Tokyo",
+  "Azuma Bridge, Tokyo",
+  "Kaminarimon, Asakusa",
+  "Sumida River Terrace, Taito City",
+  "Ryogoku Bridge, Tokyo",
+  "THE GATE HOTEL RYOGOKU by HULIC",
+];
+const googleRoute = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(hotel)}&destination=${encodeURIComponent(hotel)}&waypoints=${routeStops.slice(1, -1).map(encodeURIComponent).join("%7C")}&travelmode=walking`;
+const appleSearch = `https://maps.apple.com/?q=${encodeURIComponent(routeStops.join(" → "))}`;
+
+function LoopDiagram() {
+  return <div className="rounded-2xl border border-black/5 bg-white p-3 sm:p-5">
+    <div className="mb-3 flex items-center justify-between gap-3">
+      <div><p className="text-xs font-medium uppercase tracking-[0.16em] text-slate-500">Route sketch</p><h3 className="mt-1 font-semibold">两岸闭环示意</h3></div>
+      <div className="flex gap-3 text-[11px] text-slate-500"><span className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-sky-800" />去程</span><span className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-sky-300" />回程</span></div>
+    </div>
+    <svg viewBox="0 0 360 380" role="img" aria-labelledby="loop-title loop-description" className="h-auto w-full">
+      <title id="loop-title">隅田川两岸晨跑闭环地图示意图</title>
+      <desc id="loop-description">从两国酒店沿河向北，经过浅草后在吾妻桥过河，沿对岸向南，在两国桥再次过河回到酒店。去程和回程分别显示为深浅不同的蓝色箭头。</desc>
+      <defs>
+        <marker id="outbound-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#075985" /></marker>
+        <marker id="return-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7dd3fc" /></marker>
+      </defs>
+      <rect x="143" y="34" width="74" height="307" rx="34" fill="#eff8fc" />
+      <path d="M180 48v275" stroke="#d7edf7" strokeWidth="1.5" strokeDasharray="4 7" />
+      <text x="180" y="194" textAnchor="middle" fill="#64748b" fontSize="10" letterSpacing="1.3" transform="rotate(-90 180 194)">SUMIDA RIVER</text>
+      <text x="270" y="32" textAnchor="middle" fill="#0369a1" fontSize="10" fontWeight="600" letterSpacing="1">EAST BANK · SUMIDA</text>
+      <text x="88" y="32" textAnchor="middle" fill="#64748b" fontSize="10" fontWeight="600" letterSpacing="1">WEST BANK · TAITO</text>
+
+      {/* Closed loop: northbound on the east bank, cross at Azuma, southbound west bank, cross at Ryogoku. */}
+      <path d="M246 320 L246 83 Q246 66 228 66 L132 66 Q112 66 112 86" fill="none" stroke="#075985" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" markerMid="url(#outbound-arrow)" markerEnd="url(#outbound-arrow)" />
+      <path d="M112 86 L112 310 Q112 330 132 330 L226 330 Q246 330 246 320" fill="none" stroke="#7dd3fc" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" markerMid="url(#return-arrow)" markerEnd="url(#return-arrow)" />
+      <path d="M246 83 Q246 66 228 66 L132 66 Q112 66 112 86" fill="none" stroke="#075985" strokeWidth="1" strokeDasharray="3 5" />
+      <path d="M112 310 Q112 330 132 330 L226 330 Q246 330 246 320" fill="none" stroke="#7dd3fc" strokeWidth="1" strokeDasharray="3 5" />
+
+      {/* East-bank outbound landmarks */}
+      <circle cx="246" cy="320" r="7" fill="#fff" stroke="#075985" strokeWidth="3" />
+      <circle cx="246" cy="245" r="4" fill="#075985" />
+      <circle cx="246" cy="185" r="4" fill="#075985" />
+      <circle cx="246" cy="125" r="4" fill="#075985" />
+      <circle cx="112" cy="86" r="6" fill="#fff" stroke="#075985" strokeWidth="3" />
+      {/* West-bank return landmarks */}
+      <circle cx="112" cy="142" r="4" fill="#7dd3fc" />
+      <circle cx="112" cy="232" r="4" fill="#7dd3fc" />
+      <circle cx="112" cy="310" r="6" fill="#fff" stroke="#7dd3fc" strokeWidth="3" />
+
+      <text x="258" y="117" fill="#172033" fontSize="11" fontWeight="600">Komagata</text>
+      <text x="258" y="132" fill="#64748b" fontSize="10">駒形 · 蔵前</text>
+      <text x="258" y="177" fill="#172033" fontSize="11" fontWeight="600">Ryogoku River Terrace</text>
+      <text x="258" y="192" fill="#64748b" fontSize="10">隅田川东岸 · 去程</text>
+      <text x="258" y="239" fill="#172033" fontSize="11" fontWeight="600">両国 · Hotel</text>
+      <text x="258" y="254" fill="#64748b" fontSize="10">起点 / 终点</text>
+
+      <text x="101" y="80" textAnchor="end" fill="#172033" fontSize="11" fontWeight="600">吾妻桥过河</text>
+      <text x="101" y="96" textAnchor="end" fill="#64748b" fontSize="10">Azuma Bridge</text>
+      <text x="101" y="134" textAnchor="end" fill="#172033" fontSize="11" fontWeight="600">浅草 · 雷门</text>
+      <text x="101" y="150" textAnchor="end" fill="#64748b" fontSize="10">Asakusa · Kaminarimon</text>
+      <text x="101" y="225" textAnchor="end" fill="#172033" fontSize="11" fontWeight="600">晴空塔方向河景</text>
+      <text x="101" y="241" textAnchor="end" fill="#64748b" fontSize="10">Sumida River Terrace · 回程</text>
+      <text x="101" y="301" textAnchor="end" fill="#172033" fontSize="11" fontWeight="600">两国桥过河</text>
+      <text x="101" y="317" textAnchor="end" fill="#64748b" fontSize="10">Ryogoku Bridge</text>
+
+      <rect x="132" y="51" width="96" height="22" rx="11" fill="#fff" stroke="#dbeafe" />
+      <text x="180" y="66" textAnchor="middle" fill="#075985" fontSize="9" fontWeight="600" letterSpacing=".6">CROSS · AZUMA</text>
+      <rect x="132" y="319" width="96" height="22" rx="11" fill="#fff" stroke="#e0f2fe" />
+      <text x="180" y="334" textAnchor="middle" fill="#0369a1" fontSize="9" fontWeight="600" letterSpacing=".6">CROSS · RYOGOKU</text>
+    </svg>
+    <p className="mt-2 text-[11px] leading-relaxed text-slate-500">路线为河岸与桥梁关系示意，非比例地图；请按现场步道及通行状况行进。</p>
+  </div>;
+}
+
+function RouteLeg({ icon: Icon, label, title, detail, tone = "outbound" }) {
+  const isReturn = tone === "return";
+  return <div className="flex gap-3">
+    <div className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${isReturn ? "bg-sky-50 text-sky-600" : "bg-sky-100 text-sky-800"}`}><Icon className="h-4 w-4" /></div>
+    <div className="min-w-0 flex-1 border-b border-black/5 pb-4 last:border-0">
+      <p className={`text-[10px] font-semibold uppercase tracking-[0.16em] ${isReturn ? "text-sky-600" : "text-sky-800"}`}>{label}</p>
+      <p className="mt-1 text-sm font-semibold text-slate-900">{title}</p>
+      <p className="mt-1 text-sm leading-relaxed text-slate-500">{detail}</p>
+    </div>
+  </div>;
+}
+
+export default function RunningRoute() {
+  return <section className="space-y-4 pb-2">
+    <header className="rounded-2xl border border-black/5 bg-white p-5 sm:p-6">
+      <p className="text-xs font-medium uppercase tracking-[0.18em] text-sky-700">Morning run · Ryogoku / Asakusa</p>
+      <h1 className="mt-2 text-xl font-semibold tracking-tight sm:text-2xl">隅田川两岸晨跑</h1>
+      <p className="mt-2 text-sm leading-relaxed text-slate-600">沿河一岸向北，在吾妻桥过河；换到另一岸向南，再从两国桥回到酒店，完成不重复的闭环。</p>
+      <div className="mt-4 flex flex-wrap items-center gap-2 text-xs">
+        <span className="rounded-full bg-sky-50 px-3 py-1.5 font-medium text-sky-800">约 4.5 km</span>
+        <span className="text-slate-500">闭环参考距离 · 实际以步道与现场导航为准</span>
+      </div>
+    </header>
+
+    <LoopDiagram />
+
+    <div className="rounded-2xl border border-black/5 bg-white p-4 sm:p-5">
+      <div className="mb-4 flex items-center gap-2"><Waves className="h-4 w-4 text-sky-700" /><h2 className="font-semibold">路线分段</h2></div>
+      <div className="space-y-4">
+        <RouteLeg icon={ArrowUpRight} label="Outbound / 去程 · 隅田川东岸" title="THE GATE HOTEL RYOGOKU → 吾妻桥" detail="从酒店接入 Ryogoku River Terrace，沿东岸向北跑，经蔵前、駒形至吾妻桥；浅草与雷门在过桥后顺路到访。" />
+        <RouteLeg icon={ArrowLeftRight} label="Crossing / 过河" title="吾妻桥 → 浅草 / 雷门 → 隅田川西岸" detail="从吾妻桥过河进入浅草，经过雷门附近后接入对岸 Sumida River Terrace。" />
+        <RouteLeg icon={ArrowDownLeft} label="Return / 回程 · 隅田川西岸" title="Sumida River Terrace → 两国桥 → 酒店" detail="沿西岸向南跑，欣赏晴空塔方向河景；到两国桥过河，回到酒店一侧并结束环线。" tone="return" />
+      </div>
+    </div>
+
+    <div className="rounded-2xl border border-black/5 bg-white p-4 sm:p-5">
+      <div className="flex items-center gap-2"><MapPin className="h-4 w-4 text-sky-700" /><h2 className="font-semibold">地图 · 搜索定位点</h2></div>
+      <p className="mt-2 text-xs leading-relaxed text-slate-500">酒店 → Ryogoku River Terrace → 蔵前 / 駒形 → 吾妻桥 → 浅草 / 雷门 → Sumida River Terrace（西岸）→ 两国桥 → 酒店</p>
+      <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+        <a href={appleSearch} target="_blank" rel="noreferrer" className="flex min-h-11 items-center justify-between rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50">Apple 地图 · 全线定位点<ExternalLink className="h-4 w-4 text-slate-500" /></a>
+        <a href={googleRoute} target="_blank" rel="noreferrer" className="flex min-h-11 items-center justify-between rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800">Google Maps · 完整步行环线<ExternalLink className="h-4 w-4" /></a>
+      </div>
+      <p className="mt-3 text-[11px] leading-relaxed text-slate-500">Google Maps 已将酒店设为起点与终点，并按顺序加入两岸定位点。地图服务可能依据步道开放状况调整具体走法。</p>
+    </div>
+
+    <div className="rounded-2xl border border-amber-200/70 bg-amber-50/60 p-4 text-sm leading-relaxed text-amber-900">
+      <p className="font-medium">晨跑提示</p>
+      <p className="mt-1">桥面及沿河步道请留意行人、自行车与路口信号；若河岸步道临时关闭，请以现场指引为准。约 4.5 km 为参考环线距离，不为凑里程加入上野绕行。</p>
+    </div>
+
+    <div className="rounded-2xl border border-black/5 bg-white p-4">
+      <h2 className="font-semibold">沿途补给</h2>
+      <p className="mt-1 text-sm leading-relaxed text-slate-500">沿线留意便利店与自��售货机；营业时间和设施情况以当天现场为准。</p>
+    </div>
+  </section>;
+}
