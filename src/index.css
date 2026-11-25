@@ -3,16 +3,27 @@
 @tailwind utilities;
 
 :root {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", "Hiragino Kaku Gothic ProN", "Yu Gothic", "PingFang SC",
-    "Microsoft YaHei", sans-serif;
-  color: #172033;
-  background: #f7f5f1;
+  color-scheme: light;
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo,
+    system-ui, sans-serif;
+  color: #24324a;
+  background: #fff9f2;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-optical-sizing: auto;
+
+  --paper: #fff9f2;
+  --ink: #24324a;
+  --sky: #74b9d6;
+  --pale-sky: #e8f4f8;
+  --persimmon: #f28c5b;
+  --matcha: #91ae8c;
+  --warm-yellow: #f2c96d;
+  --card: #fff;
+  --muted: #718096;
+  --border: rgba(36, 50, 74, 0.08);
 }
 
 *,
@@ -23,18 +34,19 @@
 
 html {
   min-width: 320px;
-  background: #f7f5f1;
   scroll-behavior: smooth;
+  background: var(--paper);
 }
 
 body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
-  background: #f7f5f1;
-  color: #172033;
+  background: var(--paper);
+  color: var(--ink);
   font-size: 15px;
-  line-height: 1.65;
+  font-weight: 400;
+  line-height: 1.7;
 }
 
 button,
@@ -59,122 +71,201 @@ a:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
-  outline: 2px solid #0369a1;
+  outline: 2px solid var(--sky);
   outline-offset: 2px;
 }
 
-input,
-textarea,
-select {
-  color: #172033;
-}
-
 ::selection {
-  color: #172033;
-  background: #e0f2fe;
+  color: var(--ink);
+  background: var(--pale-sky);
 }
 
-/* Shared Japanese winter-journal palette for existing Tailwind utility classes. */
+h1,
+h2,
+h3,
+h4 {
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+
+/* Shared paper, card, and ink tokens for the existing Tailwind-based pages. */
+.bg-\[\#f7f5f1\] {
+  background-color: var(--paper) !important;
+}
+
+.bg-white {
+  background-color: var(--card) !important;
+}
+
 .text-slate-900,
 .text-slate-950 {
-  color: #172033 !important;
+  color: var(--ink) !important;
 }
 
+.text-slate-800,
+.text-slate-700 {
+  color: #3c4b62 !important;
+}
+
+.text-slate-600,
 .text-slate-500,
-.text-slate-600 {
-  color: #64748b !important;
+.text-slate-400 {
+  color: var(--muted) !important;
 }
 
+.border-black\/5,
+.border-black\/10,
+.border-slate-100,
+.border-slate-200 {
+  border-color: var(--border) !important;
+}
+
+/* Winter-sky blue is the default accent; use restrained warm and matcha accents by section. */
 .text-sky-600,
 .text-sky-700,
 .text-sky-800 {
-  color: #0369a1 !important;
-}
-
-.bg-sky-600,
-.bg-sky-700 {
-  background-color: #0369a1 !important;
+  color: #397f9d !important;
 }
 
 .bg-sky-50,
+.bg-sky-50\/60,
 .bg-sky-100 {
-  background-color: #e0f2fe !important;
+  background-color: var(--pale-sky) !important;
+}
+
+.bg-sky-600,
+.bg-sky-700,
+.bg-sky-800 {
+  background-color: var(--sky) !important;
 }
 
 .border-sky-100,
 .border-sky-200,
 .border-sky-300 {
-  border-color: rgba(3, 105, 161, 0.18) !important;
-}
-
-/* Keep existing highlighted travel recommendations within the same calm palette. */
-.bg-emerald-50\/60,
-.bg-emerald-50 {
-  background-color: #e0f2fe !important;
-}
-
-.border-emerald-100 {
-  border-color: rgba(3, 105, 161, 0.18) !important;
+  border-color: rgba(116, 185, 214, 0.32) !important;
 }
 
 .text-emerald-700,
 .text-emerald-800 {
-  color: #0369a1 !important;
+  color: #637e60 !important;
 }
 
-/* Dark summary blocks become lightweight paper cards, without changing their content. */
+.bg-emerald-50,
+.bg-emerald-50\/60,
+.bg-emerald-100 {
+  background-color: #edf3eb !important;
+}
+
+.border-emerald-100,
+.border-emerald-200 {
+  border-color: rgba(145, 174, 140, 0.34) !important;
+}
+
+.text-amber-800,
+.text-amber-900,
+.text-amber-950 {
+  color: #946c22 !important;
+}
+
+.bg-amber-50,
+.bg-amber-50\/60,
+.bg-amber-100 {
+  background-color: #fbf3df !important;
+}
+
+.border-amber-200 {
+  border-color: rgba(242, 201, 109, 0.45) !important;
+}
+
+/* Former black summary surfaces become premium navy-ink cards rather than dashboard slabs. */
 .bg-slate-950 {
-  color: #172033 !important;
-  background-color: #fff !important;
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  color: var(--ink) !important;
+  background-color: var(--card) !important;
+  border: 1px solid var(--border);
+  box-shadow: 0 3px 14px rgba(36, 50, 74, 0.035);
 }
 
 .bg-slate-950 .text-white {
-  color: #172033 !important;
+  color: var(--ink) !important;
 }
 
 .bg-slate-950 .text-slate-300,
 .bg-slate-950 .text-slate-400 {
-  color: #64748b !important;
+  color: var(--muted) !important;
 }
 
-/* Preserve the journal hero's hierarchy while avoiding a heavy gradient surface. */
+/* The pre-existing poster keeps its content and layout, with paper-like editorial treatment. */
 [class*="from-sky-700"] {
-  color: #172033 !important;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  background: #fff !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--border);
+  background: var(--card) !important;
+  box-shadow: 0 6px 22px rgba(36, 50, 74, 0.06) !important;
 }
 
 [class*="from-sky-700"] .text-white {
-  color: #172033 !important;
+  color: var(--ink) !important;
 }
 
 [class*="from-sky-700"] .text-sky-100,
+[class*="from-sky-700"] .text-sky-200,
 [class*="from-sky-700"] .text-slate-200,
 [class*="from-sky-700"] .text-slate-300 {
-  color: #64748b !important;
+  color: var(--muted) !important;
 }
 
-/* All existing cards share a quiet border and consistent typography. */
+/* Light stationery shadows and a consistent card finish across every page. */
 article.rounded-2xl.border,
 section.rounded-2xl.border,
 div.rounded-2xl.border {
-  border-color: rgba(15, 23, 42, 0.08);
+  border-color: var(--border);
+  box-shadow: 0 3px 14px rgba(36, 50, 74, 0.035);
 }
 
-h1,
-h2,
-h3 {
-  color: #172033;
-  letter-spacing: -0.025em;
+/* Existing navy buttons remain readable; selected navigation uses ink navy. */
+.bg-slate-900 {
+  background-color: var(--ink) !important;
+}
+
+.text-slate-900.bg-white,
+.bg-white.text-slate-900 {
+  color: var(--ink) !important;
 }
 
 nav.fixed {
-  border-color: rgba(15, 23, 42, 0.08) !important;
-  background-color: rgba(255, 255, 255, 0.9) !important;
-  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06) !important;
+  border-color: var(--border) !important;
+  background-color: rgba(255, 255, 255, 0.91) !important;
+  box-shadow: 0 5px 20px rgba(36, 50, 74, 0.09) !important;
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
+}
+
+/* Route map uses the same three route accents: sky, persimmon crossing, matcha return. */
+svg [stroke="#075985"] {
+  stroke: var(--sky) !important;
+}
+
+svg [stroke="#7dd3fc"] {
+  stroke: var(--matcha) !important;
+}
+
+svg [fill="#075985"] {
+  fill: var(--persimmon) !important;
+}
+
+svg [fill="#7dd3fc"] {
+  fill: var(--matcha) !important;
+}
+
+svg [fill="#eff8fc"] {
+  fill: var(--pale-sky) !important;
+}
+
+svg [fill="#dbeafe"] {
+  fill: rgba(242, 140, 91, 0.25) !important;
+}
+
+svg [fill="#e0f2fe"] {
+  fill: rgba(145, 174, 140, 0.28) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
