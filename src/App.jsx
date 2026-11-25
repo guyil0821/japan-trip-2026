@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { CalendarDays, Snowflake } from "lucide-react";
-import RunningRoute from "./pages/RunningRoute";
 import TripPage from "./pages/TripPage";
 import BudgetPage from "./pages/BudgetPage";
 import TransportPage from "./pages/TransportPage";
@@ -8,7 +7,6 @@ import StayPage from "./pages/StayPage";
 import LedgerPage from "./pages/LedgerPage";
 import PrepPage from "./pages/PrepPage";
 import TodayPage from "./pages/TodayPage";
-import TopTabs from "./components/TopTabs";
 import BottomNavigation from "./components/BottomNavigation";
 import useLocalStorage from "./hooks/useLocalStorage";
 import { entryCny } from "./utils/currency";
@@ -26,7 +24,7 @@ const pageLabels = {
 
 export default function App() {
   const [open, setOpen] = useState("12/20");
-  const [tab, setTab] = useState("trip");
+  const [tab, setTab] = useState("today");
   const [entries] = useLocalStorage("sybil-japan-ledger", []);
   const grandTotal = entries.reduce((sum, entry) => sum + entryCny(entry), 0);
   const [title, subtitle] = pageLabels[tab] || pageLabels.trip;
@@ -40,7 +38,6 @@ export default function App() {
         </a>
         <span className="ios-date-pill"><CalendarDays size={14} /> 8 天</span>
       </div>
-      <div className="ios-desktop-tabs"><TopTabs tab={tab} setTab={setTab} /></div>
     </header>
 
     <main id="top" className="ios-main">
@@ -49,7 +46,6 @@ export default function App() {
         <h1>{title}</h1>
         <p>{subtitle}</p>
       </section>
-      <div className="ios-mobile-tabs"><TopTabs tab={tab} setTab={setTab} /></div>
       <div className="ios-content">
         {tab === "trip" && <TripPage open={open} setOpen={setOpen} />}
         {tab === "run" && <RunningRoute />}
@@ -58,7 +54,7 @@ export default function App() {
         {tab === "transport" && <TransportPage />}
         {tab === "stay" && <StayPage setTab={setTab} />}
         {tab === "prep" && <PrepPage />}
-        {tab === "today" && <TodayPage setTab={setTab} grandTotal={grandTotal} />}
+        {tab === "today" && <TodayPage setTab={setTab} grandTotal={grandTotal} entryCount={entries.length} />}
       </div>
       <footer className="ios-footer">Made for a little winter journey <span>✳</span></footer>
     </main>
