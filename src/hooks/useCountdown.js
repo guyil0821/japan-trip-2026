@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-const START = new Date(2026, 11, 16, 0, 0, 0);
-const END = new Date(2026, 11, 24, 0, 0, 0);
+// The outbound departure is shown in Shanghai local time (UTC+8).
+const START = new Date("2026-12-16T14:00:00+08:00");
+// Return flight arrival, shown in Shanghai local time.
+const END = new Date("2026-12-23T12:20:00+08:00");
 
 function getCountdown(now) {
   if (now < START) {
