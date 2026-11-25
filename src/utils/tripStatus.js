@@ -10,15 +10,17 @@ function formatLocalDate(date) {
 
 export function getTripStatus(date = new Date()) {
   const localDate = formatLocalDate(date);
-  if (localDate < START_DATE) return { status: "before", itineraryDate: null };
-  if (localDate > END_DATE) return { status: "after", itineraryDate: null };
-  const [, month, day] = localDate.split("-");
-  return { status: "during", itineraryDate: `${month}/${day}` };
+  const [year, month, day] = START_DATE.split("-").map(Number);
+  const start = new Date(year, month - 1, day);
+  const today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const countdownDays = Math.max(0, Math.round((start.getTime() - today.getTime()) / 86400000));
+
+  if (localDate < START_DATE) return { status: "before", itineraryDate: null, countdownDays };
+  if (localDate > END_DATE) return { status: "after", itineraryDate: null, countdownDays: 0 };
+  const [, itineraryMonth, itineraryDay] = localDate.split("-");
+  return { status: "during", itineraryDate: `${itineraryMonth}/${itineraryDay}`, countdownDays: 0 };
 }
 
 export function daysUntilTrip(date = new Date()) {
-  const [year, month, day] = START_DATE.split("-").map(Number);
-  const start = Date.UTC(year, month - 1, day);
-  const today = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
-  return Math.max(0, Math.ceil((start - today) / 86400000));
+  return getTripStatus(date).countdownDays;
 }

@@ -23,7 +23,7 @@ export default function App() {
       {tab === "ledger" && <LedgerPage {...ledger} />}
       {tab === "transport" && <TransportPage />}
       {tab === "prep" && <PrepPage />}
-      {tab === "today" && <TodayPage setTab={setTab} />}
+      {tab === "today" && <TodayPage setTab={setTab} grandTotal={ledger.grandTotal} />}
     </main><BottomNavigation tab={tab} setTab={setTab} />
   </div>;
 }
