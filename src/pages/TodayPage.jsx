@@ -1,9 +1,8 @@
 import React from "react";
-import { CalendarDays, CheckSquare, Footprints, Map, ReceiptText, ShoppingBag, Sparkles, Train, WalletCards } from "lucide-react";
+import { CalendarDays, CheckSquare, Footprints, Map, MapPin, ReceiptText, ShoppingBag, Sparkles, Train, WalletCards } from "lucide-react";
 import { daysUntilTrip, getTripStatus } from "../utils/tripStatus";
 import { days } from "../data/itinerary";
 import { dailyGuide } from "../data/dailyGuide";
-import { initialShop } from "../data/shopping";
 import { cny } from "../utils/currency";
 import useWeather from "../hooks/useWeather";
 

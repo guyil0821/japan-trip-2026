@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { CalendarDays, Snowflake } from "lucide-react";
+import RunningRoute from "./pages/RunningRoute";
 import TripPage from "./pages/TripPage";
 import BudgetPage from "./pages/BudgetPage";
 import TransportPage from "./pages/TransportPage";
