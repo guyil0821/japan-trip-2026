@@ -1,8 +1,12 @@
 import React from "react";
-import { CalendarDays, ShoppingBag, ReceiptText, Train, MapPin, ClipboardCheck, Sparkles, BedDouble } from "lucide-react";
+import { CalendarDays, ClipboardCheck, Sparkles, Train, WalletCards } from "lucide-react";
 
-const items = [["today", "今日", Sparkles], ["prep", "准备", ClipboardCheck], ["trip", "行程", CalendarDays], ["transport", "交通", Train], ["stay", "住宿", BedDouble], ["run", "跑步", MapPin], ["budget", "预算", ShoppingBag], ["ledger", "记账", ReceiptText]];
+const items = [["today", "今日", Sparkles], ["prep", "准备", ClipboardCheck], ["trip", "行程", CalendarDays], ["transport", "交通", Train], ["budget", "预算", WalletCards]];
 
 export default function BottomNavigation({ tab, setTab }) {
-  return <nav className="fixed bottom-3 left-1/2 z-20 w-[calc(100%-24px)] max-w-lg -translate-x-1/2 overflow-x-auto whitespace-nowrap rounded-2xl border bg-white/90 p-2 text-[10px] shadow-xl backdrop-blur sm:text-[11px]"><div className="flex min-w-max">{items.map(([key, label, Icon]) => <button key={key} onClick={() => setTab(key)} className={`min-w-[64px] shrink-0 px-2 py-1 ${tab === key ? "text-sky-700" : "text-slate-500"}`}><Icon className="mx-auto mb-1 h-5 w-5" />{label}</button>)}</div></nav>;
+  return <nav className="mobile-navigation" aria-label="常用导航">
+    {items.map(([key, label, Icon]) => <button type="button" key={key} onClick={() => setTab(key)} className={tab === key ? "is-active" : ""} aria-current={tab === key ? "page" : undefined}>
+      <Icon size={18} strokeWidth={tab === key ? 2.2 : 1.7} /><span>{label}</span>
+    </button>)}
+  </nav>;
 }
