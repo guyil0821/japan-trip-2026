@@ -14,14 +14,14 @@ import useLocalStorage from "./hooks/useLocalStorage";
 import { entryCny } from "./utils/currency";
 
 const pageCopy = {
-  today: ["TRAVEL JOURNAL · 2026", "旅途，从今天开始。", "天气、灵感与当日安排，都在这里。"],
-  prep: ["BEFORE YOU GO", "把期待，装进行李。", "出发前的准备清单，一项项轻松搞定。"],
-  trip: ["THE ITINERARY", "一路向北，慢慢抵达。", "从成田到东京，把八天的冬日旅程收进一页。"],
-  transport: ["GETTING AROUND", "下一站，准时出发。", "车次、换乘与移动计划，随时查看。"],
-  stay: ["PLACES TO STAY", "今晚，住进旅途里。", "酒店信息和入住安排，触手可及。"],
-  run: ["RUNNING ROUTE", "用脚步，认识一座城。", "东京晨跑路线与沿途的小小发现。"],
-  budget: ["TRIP BUDGET", "好好旅行，也好好计划。", "预算一目了然，把余裕留给惊喜。"],
-  ledger: ["TRAVEL LEDGER", "每一笔，都有它的故事。", "随手记下旅途花费，回头看也清清楚楚。"],
+  today: ["TRAVEL NOTES / 01", "旅のはじまり。", "天气、灵感与当日安排，都在这里。"],
+  prep: ["BEFORE DEPARTURE", "旅支度を、少しずつ。", "出发前的准备清单，一项项轻松搞定。"],
+  trip: ["THE WINTER ISSUE · 2026", "冬の日本を、めぐる。", "从成田到东京，八天行程与沿途风景。"],
+  transport: ["ON THE MOVE", "列車に乗って、北へ。", "车次、换乘与移动计划，随时查看。"],
+  stay: ["GOOD NIGHT, JAPAN", "今夜の宿。", "酒店信息和入住安排，触手可及。"],
+  run: ["CITY RUN / TOKYO", "朝の東京を走る。", "东京晨跑路线与沿途的小小发现。"],
+  budget: ["THE TRIP, IN NUMBERS", "旅の予算。", "预算一目了然，把余裕留给惊喜。"],
+  ledger: ["A LITTLE TRAVEL LEDGER", "旅の記録。", "随手记下旅途花费，回头看也清清楚楚。"],
 };
 
 export default function App() {
@@ -36,23 +36,26 @@ export default function App() {
       <header className="site-header sticky top-0 z-30">
         <div className="site-header-inner">
           <a className="brand-lockup" href="#top" aria-label="Sybil Japan Trip 首页" onClick={() => setTab("today")}>
-            <span className="brand-mark"><Compass size={21} strokeWidth={1.8} /></span>
-            <span className="brand-name">旅のしおり<small>SYBIL · JAPAN 2026</small></span>
+            <span className="brand-mark"><Compass size={19} strokeWidth={1.7} /></span>
+            <span className="brand-name">旅のしおり<small>SYBIL'S JAPAN JOURNAL</small></span>
           </a>
-          <div className="header-note"><Snowflake size={15} /> WINTER EDITION <span>·</span> 12.16 — 12.23</div>
+          <div className="header-note"><Snowflake size={14} /> 16 — 23 DECEMBER <span>／</span> 2026</div>
         </div>
         <div className="desktop-tabs"><TopTabs tab={tab} setTab={setTab} /></div>
       </header>
 
       <main id="top" className="page-wrap">
         <section className="page-intro" aria-label="当前页面介绍">
+          <div className="cover-photo" role="img" aria-label="日本冬日街景" />
+          <div className="cover-shade" />
+          <div className="cover-meta"><span>VOL. 01</span><span>WINTER / 2026</span><span>日本 · 8 DAYS</span></div>
           <div className="intro-copy">
             <div className="eyebrow"><span />{eyebrow}</div>
             <h1>{title}</h1>
             <p>{subtitle}</p>
           </div>
-          <div className="intro-stamp" aria-hidden="true"><span>冬</span><small>JAPAN<br />2026</small></div>
-          <div className="intro-route"><span>成田</span><i /><span>青森</span><i /><span>东京</span><ArrowDownRight size={14} /></div>
+          <div className="intro-route"><span>成田</span><i /><span>青森</span><i /><span>東京</span><ArrowDownRight size={14} /></div>
+          <div className="cover-caption">A WINTER JOURNEY THROUGH JAPAN <b>↗</b></div>
         </section>
 
         <div className="mobile-tabs"><TopTabs tab={tab} setTab={setTab} /></div>
@@ -66,7 +69,7 @@ export default function App() {
           {tab === "prep" && <PrepPage />}
           {tab === "today" && <TodayPage setTab={setTab} grandTotal={grandTotal} />}
         </div>
-        <footer className="page-footer"><span>SYBIL'S TRAVEL JOURNAL</span><span>東京で、また会いましょう。</span></footer>
+        <footer className="page-footer"><span>SYBIL'S JAPAN JOURNAL <i>—</i> VOL. 01</span><span>東京で、また会いましょう。</span></footer>
       </main>
       <BottomNavigation tab={tab} setTab={setTab} />
     </div>
