@@ -1,14 +1,23 @@
 import React from "react";
-import { ArrowDownLeft, ArrowLeftRight, ArrowUpRight, ExternalLink, MapPin, Waves } from "lucide-react";
+import { ArrowDownLeft, ArrowLeftRight, ArrowUpRight, ExternalLink, House, Landmark, MapPin, Trees, Waves } from "lucide-react";
+import { motion } from "framer-motion";
+import "../styles/route-sketch.css";
 
 const ROUTE_COLORS = {
   outbound: "#58736A",
+  outboundSoft: "#789086",
   return: "#59BCE8",
+  returnSoft: "#A9DDF2",
   river: "#DCEBF1",
   riverText: "#78919A",
-  nodeFill: "#FFF9ED",
+  paper: "#FFFAF0",
+  page: "#F4EFDD",
   text: "#34443D",
   muted: "#788A83",
+  faint: "#A4AEA9",
+  bridge: "#C4B58C",
+  tree: "#78906E",
+  hotel: "#A88865",
 };
 
 const hotel = "THE GATE HOTEL RYOGOKU by HULIC, Tokyo";
@@ -28,134 +37,75 @@ const appleSearch = `https://maps.apple.com/?q=${encodeURIComponent(routeStops.j
 
 function RouteLegend() {
   return <div className="route-sketch-legend" aria-label="路线图例">
-    <span><i style={{ background: ROUTE_COLORS.outbound }} />去程</span>
-    <span><i style={{ background: ROUTE_COLORS.return }} />回程</span>
+    <span><i style={{ backgroundColor: ROUTE_COLORS.outbound }} />去程</span>
+    <span><i style={{ backgroundColor: ROUTE_COLORS.return }} />回程</span>
   </div>;
 }
 
-function RouteLocation({ title, kana, subtitle, side = "left", active = false }) {
-  return <div className={`route-sketch-location ${side === "left" ? "is-left" : "is-right"} ${active ? "is-active" : ""}`}>
-    <div className="route-sketch-title">{title}</div>
-    {kana && <div className="route-sketch-kana">{kana}</div>}
-    {subtitle && <div className="route-sketch-subtitle">{subtitle}</div>}
-  </div>;
+function RouteNode({ type = "outbound", important = false }) {
+  const color = type === "return" ? ROUTE_COLORS.return : ROUTE_COLORS.outbound;
+  return <span className={`route-sketch-node ${important ? "is-important" : ""}`} style={{ borderColor: color }} aria-hidden="true" />;
 }
 
-function RouteGraphic() {
-  return <div className="route-sketch-graphic" role="img" aria-label="路线：两国酒店沿东岸经过两国、藏前、驹形桥，在吾妻桥过河至西岸，经浅草和隅田川河岸到两国桥，再返回酒店">
-    <div className="route-sketch-river" />
-    <div className="route-sketch-river-label">隅田川 · SUMIDA RIVER</div>
-    <svg viewBox="0 0 160 204" preserveAspectRatio="none" aria-hidden="true">
-      <defs>
-        <marker id="route-arrow-outbound" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-          <path d="M 1 1 L 8 5 L 1 9" fill="none" stroke={ROUTE_COLORS.outbound} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-        </marker>
-        <marker id="route-arrow-return" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-          <path d="M 1 1 L 8 5 L 1 9" fill="none" stroke={ROUTE_COLORS.return} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-        </marker>
-      </defs>
-      {/* East-bank outbound: hotel → Ryogoku → Kuramae → Komagata → Azuma Bridge. */}
-      <path d="M124 178 L124 25" fill="none" stroke={ROUTE_COLORS.outbound} strokeWidth="4" strokeLinecap="round" markerEnd="url(#route-arrow-outbound)" />
-      <path d="M124 25 H36" fill="none" stroke={ROUTE_COLORS.outbound} strokeWidth="4" strokeLinecap="round" markerEnd="url(#route-arrow-outbound)" />
-      {/* West-bank return: Azuma Bridge → Asakusa → Sumida River Terrace → Ryogoku Bridge → hotel. */}
-      <path d="M36 25 L36 178" fill="none" stroke={ROUTE_COLORS.return} strokeWidth="4" strokeLinecap="round" markerEnd="url(#route-arrow-return)" />
-      <path d="M36 178 H124" fill="none" stroke={ROUTE_COLORS.return} strokeWidth="4" strokeLinecap="round" markerEnd="url(#route-arrow-return)" />
-      {/* Horizontal bridge crossings. */}
-      <path d="M36 25 H124" fill="none" stroke="#F7F2E7" strokeWidth="8" strokeLinecap="round" />
-      <path d="M36 178 H124" fill="none" stroke="#F7F2E7" strokeWidth="8" strokeLinecap="round" />
-      <path d="M124 25 H36" fill="none" stroke={ROUTE_COLORS.outbound} strokeWidth="4" strokeLinecap="round" markerEnd="url(#route-arrow-outbound)" />
-      <path d="M36 178 H124" fill="none" stroke={ROUTE_COLORS.return} strokeWidth="4" strokeLinecap="round" markerEnd="url(#route-arrow-return)" />
-      {/* Route nodes; outlines use the same shared constants as the paths and legend. */}
-      <circle cx="124" cy="25" r="6" fill={ROUTE_COLORS.nodeFill} stroke={ROUTE_COLORS.outbound} strokeWidth="3" />
-      <circle cx="36" cy="25" r="6" fill={ROUTE_COLORS.nodeFill} stroke={ROUTE_COLORS.outbound} strokeWidth="3" />
-      <circle cx="124" cy="76" r="6" fill={ROUTE_COLORS.nodeFill} stroke={ROUTE_COLORS.outbound} strokeWidth="3" />
-      <circle cx="36" cy="76" r="6" fill={ROUTE_COLORS.nodeFill} stroke={ROUTE_COLORS.return} strokeWidth="3" />
-      <circle cx="124" cy="127" r="6" fill={ROUTE_COLORS.nodeFill} stroke={ROUTE_COLORS.outbound} strokeWidth="3" />
-      <circle cx="36" cy="127" r="6" fill={ROUTE_COLORS.nodeFill} stroke={ROUTE_COLORS.return} strokeWidth="3" />
-      <circle cx="36" cy="178" r="6" fill={ROUTE_COLORS.nodeFill} stroke={ROUTE_COLORS.return} strokeWidth="3" />
-      <circle cx="124" cy="178" r="7" fill={ROUTE_COLORS.nodeFill} stroke={ROUTE_COLORS.outbound} strokeWidth="3" />
-    </svg>
-    <span className="route-sketch-bridge route-sketch-bridge--top">吾妻桥</span>
-    <span className="route-sketch-bridge route-sketch-bridge--bottom">两国桥</span>
+function MapLabel({ title, kana, english, align = "left", accent = false }) {
+  return <div className={`route-sketch-label ${align === "right" ? "is-right" : "is-left"}`}>
+    <div className={`route-sketch-label-title ${accent ? "is-accent" : ""}`}>{title}</div>
+    {kana && <div className="route-sketch-label-kana">{kana}</div>}
+    {english && <div className="route-sketch-label-english">{english}</div>}
   </div>;
 }
 
 function RouteSketch() {
-  return <section className="route-sketch-card" aria-label="Route Sketch 两岸闭环示意">
-    <style>{`
-      .route-sketch-card { box-sizing:border-box; width:100%; max-width:760px; min-height:300px; max-height:340px; margin:0 auto; padding:16px; overflow:visible; border:1px solid #DED8C0; border-radius:22px; background:#FFFAF0; box-shadow:0 4px 15px rgba(78,88,69,.06); }
-      .route-sketch-header { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:20px; }
-      .route-sketch-heading p { margin:0; color:${ROUTE_COLORS.muted}; font-size:8px; font-weight:700; letter-spacing:.18em; }
-      .route-sketch-heading h3 { margin:4px 0 0; color:${ROUTE_COLORS.text}; font-family:var(--font-story,"Kiwi Maru",serif); font-size:17px; font-weight:500; }
-      .route-sketch-legend { display:flex; flex-shrink:0; align-items:center; gap:12px; color:${ROUTE_COLORS.muted}; font-size:9px; }
-      .route-sketch-legend span { display:flex; align-items:center; gap:6px; white-space:nowrap; }
-      .route-sketch-legend i { width:10px; height:10px; flex:none; border-radius:50%; }
-      .route-sketch-banks { display:grid; grid-template-columns:minmax(0,1fr) minmax(150px,1.4fr) minmax(0,1fr); align-items:stretch; gap:8px; width:100%; max-width:100%; }
-      .route-sketch-bank { display:grid; grid-template-rows:28px repeat(4,minmax(45px,1fr)); min-width:0; }
-      .route-sketch-bank-heading { margin:0; color:#526A61; font-size:clamp(12px,1.8vw,16px); font-weight:700; line-height:1.2; }
-      .route-sketch-bank--west .route-sketch-bank-heading { text-align:right; }
-      .route-sketch-location { align-self:center; min-width:0; padding:2px 3px; white-space:normal; overflow-wrap:anywhere; word-break:normal; line-height:1.35; }
-      .route-sketch-location.is-left { text-align:right; }
-      .route-sketch-location.is-right { text-align:left; }
-      .route-sketch-title { color:${ROUTE_COLORS.text}; font-family:var(--font-story,"Kiwi Maru",serif); font-size:13px; font-weight:500; line-height:1.35; }
-      .route-sketch-kana { margin-top:2px; color:${ROUTE_COLORS.muted}; font-size:9px; line-height:1.35; }
-      .route-sketch-subtitle { margin-top:2px; color:#86948E; font-size:8px; line-height:1.35; }
-      .route-sketch-graphic { position:relative; align-self:stretch; min-width:0; height:232px; }
-      .route-sketch-graphic svg { position:absolute; z-index:1; inset:14px 0 14px; display:block; width:100%; height:204px; overflow:visible; }
-      .route-sketch-river { position:absolute; z-index:0; top:12px; bottom:12px; left:50%; width:18%; min-width:20px; transform:translateX(-50%); border-radius:40px; background:${ROUTE_COLORS.river}; opacity:.72; }
-      .route-sketch-river-label { position:absolute; z-index:0; top:50%; left:50%; color:${ROUTE_COLORS.riverText}; font-size:7px; letter-spacing:.08em; white-space:nowrap; transform:translate(-50%,-50%) rotate(-90deg); }
-      .route-sketch-bridge { position:absolute; z-index:2; left:50%; padding:0 4px; color:#526A61; background:#FFFAF0; font-size:9px; line-height:1.2; white-space:nowrap; transform:translateX(-50%); }
-      .route-sketch-bridge--top { top:0; }
-      .route-sketch-bridge--bottom { bottom:0; }
-      @media(max-width:600px) {
-        .route-sketch-card { min-height:330px; max-height:none; padding:16px 12px 20px; }
-        .route-sketch-header { gap:8px; margin-bottom:18px; }
-        .route-sketch-legend { gap:8px; }
-        .route-sketch-banks { grid-template-columns:minmax(0,1fr) minmax(120px,1.25fr) minmax(0,1fr); gap:4px; }
-        .route-sketch-bank { grid-template-rows:30px repeat(4,minmax(50px,1fr)); }
-        .route-sketch-bank-heading { font-size:12px; }
-        .route-sketch-location { padding:2px 1px; }
-        .route-sketch-title { font-size:12px; }
-        .route-sketch-kana { font-size:8px; }
-        .route-sketch-subtitle { font-size:7px; }
-        .route-sketch-graphic { height:230px; }
-        .route-sketch-graphic svg { height:204px; }
-      }
-      @media(max-width:420px) {
-        .route-sketch-banks { grid-template-columns:minmax(92px,.9fr) minmax(120px,1.1fr) minmax(92px,.9fr); gap:2px; }
-      }
-      @media(max-width:360px) {
-        .route-sketch-card { padding-right:8px; padding-left:8px; }
-        .route-sketch-banks { grid-template-columns:minmax(84px,.9fr) minmax(105px,1.1fr) minmax(84px,.9fr); gap:1px; }
-        .route-sketch-bank-heading { font-size:11px; }
-      }
-    `}</style>
-
+  return <section className="route-sketch-card" aria-label="ROUTE SKETCH / 两岸闭环示意">
     <div className="route-sketch-header">
-      <div className="route-sketch-heading"><p>ROUTE SKETCH</p><h3>两岸闭环示意</h3></div>
+      <div>
+        <p>ROUTE SKETCH</p>
+        <h3>两岸闭环示意</h3>
+      </div>
       <RouteLegend />
     </div>
 
-    <div className="route-sketch-banks">
-      <div className="route-sketch-bank route-sketch-bank--west">
-        <h4 className="route-sketch-bank-heading">西岸・台东区<br />(たいとうく)</h4>
-        <RouteLocation title="浅草・雷门" kana="あさくさ・かみなりもん" subtitle="Asakusa · Kaminarimon" side="left" />
-        <RouteLocation title="隅田川テラス" kana="すみだがわ" subtitle="Sumida River Terrace" side="left" />
-        <RouteLocation title="两国桥" kana="りょうごくばし" subtitle="过河 · 回到西岸" side="left" />
-        <RouteLocation title="吾妻桥" kana="あづまばし" subtitle="桥梁过河" side="left" />
-      </div>
+    <div className="route-sketch-canvas" role="img" aria-label="概念路线示意：两国酒店沿东岸经过两国、藏前、驹形桥，在吾妻桥过河至西岸，经浅草和隅田川河畔到两国桥，再返回酒店">
+      <div className="route-sketch-bank-title route-sketch-west-title">WEST BANK <span>西岸 · 台東区</span></div>
+      <div className="route-sketch-bank-title route-sketch-east-title">EAST BANK <span>東岸 · 墨田区</span></div>
 
-      <RouteGraphic />
+      <div className="route-sketch-river" />
+      <div className="route-sketch-river-dash" />
+      <div className="route-sketch-river-name">隅田川 · SUMIDA RIVER</div>
 
-      <div className="route-sketch-bank route-sketch-bank--east">
-        <h4 className="route-sketch-bank-heading">东岸・墨田区<br />(すみだく)</h4>
-        <RouteLocation title="驹形桥" kana="こまがたばし" subtitle="Komagata Bridge" side="right" />
-        <RouteLocation title="藏前" kana="くらまえ" subtitle="Kuramae" side="right" />
-        <RouteLocation title="两国" kana="りょうごく" subtitle="隅田川东岸 · 去程" side="right" />
-        <RouteLocation title="两国酒店" kana="りょうごく" subtitle="Hotel · 起点 / 终点" side="right" active />
-      </div>
+      <svg className="route-sketch-lines" viewBox="0 0 1000 400" preserveAspectRatio="none" aria-hidden="true">
+        {/* Soft bridge decks sit underneath the walking paths. */}
+        <path d="M340 88 H660" stroke={ROUTE_COLORS.bridge} strokeWidth="11" opacity=".25" strokeLinecap="round" />
+        <path d="M340 310 H660" stroke={ROUTE_COLORS.bridge} strokeWidth="11" opacity=".25" strokeLinecap="round" />
+        {/* Outbound: hotel → east bank → Komagata Bridge → Azuma Bridge crossing. */}
+        <path d="M660 360 L660 250 L660 190 L660 140 L660 88 H340" fill="none" stroke={ROUTE_COLORS.outbound} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+        {/* Return: west bank river walk → Ryogoku Bridge → hotel. */}
+        <path d="M340 88 L340 150 L340 220 L340 270 L340 310 H660 L660 360" fill="none" stroke={ROUTE_COLORS.return} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        {/* Quiet direction chevrons (no large arrowheads). */}
+        <path d="M654 165 l6 -6 6 6" fill="none" stroke={ROUTE_COLORS.outboundSoft} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M346 245 l-6 6 -6 -6" fill="none" stroke={ROUTE_COLORS.returnSoft} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        {/* Slow moving direction markers follow the corresponding route colors. */}
+        <motion.circle r="5" fill={ROUTE_COLORS.outbound}
+          animate={{ cx: [660, 660, 660, 660, 340], cy: [360, 250, 190, 140, 88] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "linear" }} />
+        <motion.circle r="4" fill={ROUTE_COLORS.return}
+          animate={{ cx: [340, 340, 340, 340, 660, 660], cy: [88, 150, 220, 310, 310, 360] }}
+          transition={{ duration: 9, repeat: Infinity, ease: "linear", delay: 1 }} />
+      </svg>
+
+      {/* Every location label is anchored beside its corresponding route node. */}
+      <div className="route-sketch-point route-sketch-point--asakusa"><RouteNode type="return" /><Landmark className="route-sketch-icon route-sketch-icon--landmark" /><MapLabel title="浅草・雷门" kana="あさくさ・かみなりもん" english="Asakusa · Kaminarimon" /></div>
+      <div className="route-sketch-point route-sketch-point--komagata"><RouteNode /><MapLabel title="驹形桥" kana="こまがたばし" english="Komagata Bridge" /></div>
+      <div className="route-sketch-point route-sketch-point--terrace"><RouteNode type="return" /><Trees className="route-sketch-icon route-sketch-icon--tree" /><MapLabel title="隅田川テラス" kana="すみだがわ" english="Sumida River Terrace" /></div>
+      <div className="route-sketch-point route-sketch-point--kuramae"><RouteNode /><MapLabel title="藏前" kana="くらまえ" english="Kuramae" /></div>
+      <div className="route-sketch-point route-sketch-point--ryogoku"><RouteNode /><MapLabel title="两国" kana="りょうごく" english="隅田川东岸 · 去程" /></div>
+      <div className="route-sketch-point route-sketch-point--ryogoku-bridge"><RouteNode type="return" /><MapLabel title="两国桥" kana="りょうごくばし" english="过河 · 回到西岸" /></div>
+      <div className="route-sketch-point route-sketch-point--hotel"><RouteNode important /><span className="route-sketch-hotel-icon"><House /></span><MapLabel title="两国酒店" kana="りょうごく" english="Hotel · 起点 / 终点" accent /></div>
+
+      <div className="route-sketch-bridge-label route-sketch-bridge-label--azuma">吾妻橋 <span>あづまばし</span></div>
+      <div className="route-sketch-bridge-label route-sketch-bridge-label--ryogoku">两国橋 <span>りょうごくばし</span></div>
+      <p className="route-sketch-note">路线为河岸与桥梁关系示意，非比例地图；请按现场步道及通行状况行进。</p>
     </div>
-    <p className="mt-2 text-[10px] leading-relaxed text-[#788A83]">路线为河岸与桥梁关系示意，非比例地图；请按现场步道及通行状况行进。</p>
   </section>;
 }
 
