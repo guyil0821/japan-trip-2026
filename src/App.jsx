@@ -4,6 +4,7 @@ import RunningRoute from "./pages/RunningRoute";
 import TripPage from "./pages/TripPage";
 import BudgetPage from "./pages/BudgetPage";
 import TransportPage from "./pages/TransportPage";
+import StayPage from "./pages/StayPage";
 import LedgerPage from "./pages/LedgerPage";
 import PrepPage from "./pages/PrepPage";
 import TodayPage from "./pages/TodayPage";
@@ -22,6 +23,7 @@ export default function App() {
       {tab === "budget" && <BudgetPage grandTotal={ledger.grandTotal} />}
       {tab === "ledger" && <LedgerPage {...ledger} />}
       {tab === "transport" && <TransportPage />}
+      {tab === "stay" && <StayPage setTab={setTab} />}
       {tab === "prep" && <PrepPage />}
       {tab === "today" && <TodayPage setTab={setTab} grandTotal={ledger.grandTotal} />}
     </main><BottomNavigation tab={tab} setTab={setTab} />
