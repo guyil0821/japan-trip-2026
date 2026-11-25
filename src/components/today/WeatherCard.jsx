@@ -1,0 +1,6 @@
+import React from "react";
+import { Cloud, Droplets, Thermometer, Wind } from "lucide-react";
+
+export default function WeatherCard({ weather, location }) {
+  return <section className="rounded-2xl border bg-white p-4"><div className="flex items-center gap-2"><Cloud className="h-5 w-5 text-sky-600" /><h2 className="font-semibold">今日天气 · {location}</h2></div>{weather.loading ? <p className="mt-3 text-sm text-slate-500">天气加载中…</p> : weather.error ? <p className="mt-3 text-sm text-slate-500">暂时无法获取实时天气</p> : weather.data && <><div className="mt-3 flex items-baseline gap-2"><span className="text-2xl font-semibold">{weather.data.description}</span><span className="text-3xl font-semibold tabular-nums">{weather.data.temperature}°C</span></div><div className="mt-3 grid grid-cols-2 gap-3 text-sm text-slate-600 sm:grid-cols-3"><div className="flex items-center gap-2"><Thermometer className="h-4 w-4 text-sky-600" />体感 {weather.data.feelsLike}°C</div><div>最高 {weather.data.high}°C / 最低 {weather.data.low}°C</div><div className="flex items-center gap-2"><Droplets className="h-4 w-4 text-sky-600" />降水概率 {weather.data.precipitation}%</div><div className="flex items-center gap-2"><Wind className="h-4 w-4 text-sky-600" />风速 {weather.data.windSpeed} km/h</div></div></>}</section>;
+}
