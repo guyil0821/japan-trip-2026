@@ -4,16 +4,16 @@ import { cny } from "../utils/currency";
 
 const totalBudget = 20000;
 
-export default function BudgetPage({ grandTotal = 0 }) {
+export default function BudgetPage({ grandTotal = 0, shoppingActual = 0 }) {
   const planned = initialShop.reduce((sum, item) => sum + (Number(item.budget) || 0), 0);
-  const spent = Number(grandTotal) || 0;
+  const spent = Number(shoppingActual) || 0;
   const remaining = Math.max(0, totalBudget - spent);
   const progress = totalBudget > 0 ? Math.min(100, Math.max(0, (spent / totalBudget) * 100)) : 0;
 
   return <section className="space-y-4">
     <div className="grid grid-cols-2 gap-2">
       <div className="rounded-2xl bg-slate-950 p-4 text-white"><div className="text-xs text-slate-300">购物总预算</div><div className="mt-2 text-2xl font-bold">{cny(totalBudget)}</div><p className="mt-1 text-xs text-slate-300">旅行预算上限</p></div>
-      <div className="rounded-2xl border bg-white p-4"><div className="text-xs text-slate-500">已记录花费</div><div className="mt-2 text-2xl font-bold">{cny(spent)}</div><p className="mt-1 text-xs text-slate-500">所有阶段 · 人民币折算</p></div>
+      <div className="rounded-2xl border bg-white p-4"><div className="text-xs text-slate-500">已记录花费</div><div className="mt-2 text-2xl font-bold">{cny(spent)}</div><p className="mt-1 text-xs text-slate-500">旅行中花费 · 购物 / 伴手礼</p></div>
     </div>
     <div className="rounded-2xl border bg-white p-4">
       <div className="flex items-center justify-between gap-3"><div><p className="text-sm font-semibold">预算使用情况</p><p className="mt-1 text-xs text-slate-500">剩余 {cny(remaining)} · 已使用 {Math.round(progress)}%</p></div><strong className="text-lg">{cny(planned)}</strong></div>
