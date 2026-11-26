@@ -26,7 +26,7 @@ const pageLabels = {
 export default function App() {
   const [open, setOpen] = useState("12/20");
   const [tab, setTab] = useState("today");
-  const [entries] = useLocalStorage("sybil-japan-ledger", []);
+  const [entries, setEntries] = useLocalStorage("sybil-japan-ledger", []);
   const grandTotal = entries.reduce((sum, entry) => sum + entryCny(entry), 0);
   const [title, subtitle] = pageLabels[tab] || pageLabels.trip;
 
@@ -51,7 +51,7 @@ export default function App() {
         {tab === "trip" && <TripPage open={open} setOpen={setOpen} />}
         {tab === "run" && <RunningRoute />}
         {tab === "budget" && <BudgetPage grandTotal={grandTotal} />}
-        {tab === "ledger" && <LedgerPage />}
+        {tab === "ledger" && <LedgerPage entries={entries} setEntries={setEntries} />}
         {tab === "transport" && <TransportPage />}
         {tab === "stay" && <StayPage setTab={setTab} />}
         {tab === "prep" && <PrepPage />}
