@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import { CalendarDays, ReceiptText, Plus, Trash2, RefreshCw } from "lucide-react";
 import { categories } from "../data/categories";
 import { RATE_API } from "../data/constants";
-import useLocalStorage from "../hooks/useLocalStorage";
 import { today } from "../utils/dates";
 import { money, cny, entryCny } from "../utils/currency";
 import LedgerSummary from "../components/ledger/LedgerSummary";
 
-export default function LedgerPage() {
+export default function LedgerPage({ entries, setEntries }) {
   const [bookTab, setBookTab] = useState("pre");
-  const [entries, setEntries] = useLocalStorage("sybil-japan-ledger", []);
   const [draft, setDraft] = useState(null);
   const [rateLoading, setRateLoading] = useState(false);
   const [rateMessage, setRateMessage] = useState("");

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ArrowDownLeft, ArrowLeftRight, ArrowUpRight, ExternalLink, House, Landmark, MapPin, Trees, Waves } from "lucide-react";
 import { motion } from "framer-motion";
 import "../styles/route-sketch.css";
@@ -170,15 +170,15 @@ function RouteLeg({ icon: Icon, label, title, detail, tone = "outbound" }) {
   </div>;
 }
 
-export default function RunningRoute() {
+function SumidaRoute() {
   return <section className="space-y-4 pb-[calc(88px+env(safe-area-inset-bottom))]">
     <header className="rounded-2xl border border-black/5 bg-white p-5 sm:p-6">
       <p className="text-xs font-medium uppercase tracking-[0.18em] text-sky-700">Morning run · Ryogoku / Asakusa</p>
       <h1 className="mt-2 text-xl font-semibold tracking-tight sm:text-2xl">隅田川两岸晨跑</h1>
       <p className="mt-2 text-sm leading-relaxed text-slate-600">沿河一岸向北，在吾妻桥（あづまばし）过河；换到另一岸向南，再从两国桥（りょうごくばし）过河回到两国酒店，形成闭环路线。</p>
       <div className="mt-4 flex flex-wrap items-center gap-2 text-xs">
-        <span className="rounded-full bg-sky-50 px-3 py-1.5 font-medium text-sky-800">约 4.5 km</span>
-        <span className="text-slate-500">闭环参考距离 · 实际以步道与现��导航为准</span>
+        <span className="rounded-full bg-sky-50 px-3 py-1.5 font-medium text-sky-800">EST. 6–7 KM</span>
+        <span className="text-slate-500">闭环参考距离 · 实际以步道与现场导航为准</span>
       </div>
     </header>
 
@@ -205,12 +205,75 @@ export default function RunningRoute() {
 
     <div className="rounded-2xl border border-amber-200/70 bg-amber-50/60 p-4 text-sm leading-relaxed text-amber-900">
       <p className="font-medium">晨跑提示</p>
-      <p className="mt-1">桥面及沿河步道请留意行人、自行车与路口信号；若河岸步道临时关闭，请以现场指引为准。约 4.5 km 为参考环线距离，实际以步道状况和导航为准。</p>
+      <p className="mt-1">桥面及沿河步道请留意行人、自行车与路口信号；若河岸步道临时关闭，请以现场指引为准。EST. 6–7 KM 为参考环线距离，实际以步道状况和导航为准。</p>
     </div>
 
     <div className="rounded-2xl border border-black/5 bg-white p-4">
       <h2 className="font-semibold">沿途补给</h2>
       <p className="mt-1 text-sm leading-relaxed text-slate-500">沿线留意便利店与自动售货机；营业时间和设施情况以当天现场为准。</p>
     </div>
+  </section>;
+}
+
+const uenoStops = [
+  "THE GATE HOTEL RYOGOKU by HULIC（両国）",
+  "Kuramae Bridge（蔵前橋）",
+  "Kuramae（蔵前）",
+  "Inaricho（稲荷町）",
+  "Ueno Park（上野恩賜公園）",
+  "Shinobazu Pond（不忍池）",
+  "Kaminarimon（雷門）",
+  "Azuma Bridge（吾妻橋）",
+  "Umaya Bridge（厩橋）",
+  "Ryogoku Bridge（両国橋）",
+  "THE GATE HOTEL RYOGOKU by HULIC（両国）",
+];
+const uenoGoogleRoute = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(hotel)}&destination=${encodeURIComponent(hotel)}&waypoints=${uenoStops.slice(1, -1).map(encodeURIComponent).join("%7C")}`;
+const uenoAppleSearch = `https://maps.apple.com/?q=${encodeURIComponent(uenoStops.join(" → "))}`;
+
+function UenoRoute() {
+  return <section className="space-y-4">
+    <header className="rounded-2xl border border-black/5 bg-white p-5 sm:p-6">
+      <p className="text-xs font-medium uppercase tracking-[0.18em] text-sky-700">Morning run · Ueno / Asakusa</p>
+      <h1 className="mt-2 text-xl font-semibold tracking-tight sm:text-2xl">上野浅草城市环线</h1>
+      <p className="mt-2 text-sm leading-relaxed text-slate-600">从两国酒店出发，经蔵前、稲荷町跑入上野公园与不忍池，再转入浅草，沿隅田川返回两国。</p>
+      <div className="mt-4 flex flex-wrap items-center gap-2 text-xs">
+        <span className="rounded-full bg-sky-50 px-3 py-1.5 font-medium text-sky-800">EST. 8 KM</span>
+        <span className="text-slate-500">城市 × 河岸闭环 · 实际以现场导航为准</span>
+      </div>
+    </header>
+    <div className="rounded-2xl border border-black/5 bg-white p-4 sm:p-5">
+      <div className="mb-4 flex items-center gap-2"><Waves className="h-4 w-4 text-sky-700"/><h2 className="font-semibold">路线分段</h2></div>
+      <div className="space-y-4">
+        <RouteLeg icon={ArrowUpRight} label="River start / 沿河出发" title="酒店 → 蔵前橋 → 蔵前 → 稲荷町 → 上野公園 → 不忍池" detail="从两国进入城市北段，以不忍池作为路线前半程的主要节点。" />
+        <RouteLeg icon={Landmark} label="City turn / 转入浅草" title="不忍池 → 浅草 → 雷門 → 吾妻橋" detail="从上野方向转入浅草，经过雷门后抵达吾妻桥。" />
+        <RouteLeg icon={ArrowDownLeft} label="Riverside return / 沿河归程" title="吾妻橋 → 隅田川西岸 → 厩橋 → 蔵前橋 → 両国橋" detail="沿隅田川向南，经桥梁节点回到两国方向。" tone="return" />
+        <RouteLeg icon={House} label="Finish / 回到两国" title="両国橋 → THE GATE HOTEL RYOGOKU" detail="过桥后返回酒店，完成城市与河岸结合的闭环路线。" tone="return" />
+      </div>
+    </div>
+    <div className="rounded-2xl border border-black/5 bg-white p-4 sm:p-5">
+      <div className="flex items-center gap-2"><MapPin className="h-4 w-4 text-sky-700"/><h2 className="font-semibold">地图 · 搜索定位点</h2></div>
+      <p className="mt-2 text-xs leading-relaxed text-slate-500">酒店 → 蔵前橋 → 蔵前 → 稲荷町 → 上野公園 → 不忍池 → 浅草 / 雷門 → 吾妻橋 → 厩橋 → 蔵前橋 → 両国橋 → 酒店</p>
+      <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+        <a href={uenoAppleSearch} target="_blank" rel="noreferrer" className="flex min-h-11 items-center justify-between rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50">在 Apple 地图中打开 <ExternalLink className="h-4 w-4"/></a>
+        <a href={uenoGoogleRoute} target="_blank" rel="noreferrer" className="flex min-h-11 items-center justify-between rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800">在 Google Maps 中打开 <ExternalLink className="h-4 w-4"/></a>
+      </div>
+      <p className="mt-3 text-[11px] leading-relaxed text-slate-500">8 KM 为预估距离。地图服务可能调整途经点顺序，出发前请复核完整闭环。</p>
+    </div>
+  </section>;
+}
+
+export default function RunningRoute() {
+  const [selectedRoute, setSelectedRoute] = useState("sumida");
+  return <section className="space-y-4 pb-[calc(88px+env(safe-area-inset-bottom))]">
+    <div className="grid grid-cols-2 gap-2 rounded-2xl border border-black/5 bg-white p-1.5" aria-label="选择晨跑路线">
+      <button type="button" onClick={() => setSelectedRoute("sumida")} aria-pressed={selectedRoute === "sumida"} className={`rounded-xl px-3 py-3 text-left text-xs font-semibold transition ${selectedRoute === "sumida" ? "bg-slate-900 text-white" : "text-slate-600 hover:bg-slate-50"}`}>
+        <span className="block">隅田川</span><span className={`mt-1 block text-[10px] ${selectedRoute === "sumida" ? "text-slate-300" : "text-slate-400"}`}>EST. 6–7 KM</span>
+      </button>
+      <button type="button" onClick={() => setSelectedRoute("ueno")} aria-pressed={selectedRoute === "ueno"} className={`rounded-xl px-3 py-3 text-left text-xs font-semibold transition ${selectedRoute === "ueno" ? "bg-slate-900 text-white" : "text-slate-600 hover:bg-slate-50"}`}>
+        <span className="block">上野浅草</span><span className={`mt-1 block text-[10px] ${selectedRoute === "ueno" ? "text-slate-300" : "text-slate-400"}`}>EST. 8 KM</span>
+      </button>
+    </div>
+    {selectedRoute === "sumida" ? <SumidaRoute /> : <UenoRoute />}
   </section>;
 }
