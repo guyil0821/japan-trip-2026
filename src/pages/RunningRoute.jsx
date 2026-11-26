@@ -234,46 +234,40 @@ const uenoAppleSearch = `https://maps.apple.com/?q=${encodeURIComponent(uenoStop
 
 function UenoRouteSketch() {
   const c = ROUTE_COLORS;
-  const nodes = [
-    { x: 69, y: 82, title: "两国酒店", sub: "Hotel · 起点 / 终点", icon: "hotel", side: "right" },
-    { x: 64, y: 69, title: "蔵前", sub: "Kuramae", icon: "station", side: "right" },
-    { x: 54, y: 55, title: "稲荷町", sub: "Inaricho", icon: "station", side: "right" },
-    { x: 39, y: 37, title: "上野公園", sub: "Ueno Park", icon: "park", side: "left" },
-    { x: 27, y: 48, title: "不忍池", sub: "Shinobazu Pond", icon: "park", side: "left" },
-    { x: 32, y: 61, title: "浅草・雷門", sub: "Asakusa · Kaminarimon", icon: "landmark", side: "left" },
-    { x: 72, y: 52, title: "吾妻橋", sub: "Azuma Bridge", icon: "bridge", side: "left" },
-    { x: 72, y: 66, title: "厩橋", sub: "Umaya Bridge", icon: "bridge", side: "left" },
-    { x: 72, y: 76, title: "両国橋", sub: "Ryogoku Bridge", icon: "bridge", side: "left" },
+  const stops = [
+    { x: 72, y: 82, title: "两国酒店", sub: "Hotel · 起点 / 终点", icon: House, align: "right" },
+    { x: 72, y: 69, title: "蔵前", sub: "Kuramae", icon: MapPin, align: "right" },
+    { x: 62, y: 58, title: "稲荷町", sub: "Inaricho", icon: MapPin, align: "right" },
+    { x: 43, y: 34, title: "上野公園", sub: "Ueno Park", icon: Trees, align: "left" },
+    { x: 30, y: 45, title: "不忍池", sub: "Shinobazu Pond", icon: Trees, align: "left" },
+    { x: 30, y: 59, title: "浅草・雷門", sub: "Asakusa · Kaminarimon", icon: Landmark, align: "left" },
+    { x: 72, y: 50, title: "吾妻橋", sub: "Azuma Bridge", icon: MapPin, align: "left" },
+    { x: 72, y: 64, title: "厩橋", sub: "Umaya Bridge", icon: MapPin, align: "left" },
+    { x: 72, y: 75, title: "両国橋", sub: "Ryogoku Bridge", icon: MapPin, align: "left" },
   ];
-  const outbound = nodes.slice(0, 7);
-  const returning = nodes.slice(6).concat(nodes.slice(0,1));
-  const pointList = a => ({ cx:a.map(n=>n.x*10), cy:a.map(n=>n.y*10) });
-  const pathD = a => `M${a.map(n=>`${n.x*10} ${n.y*10}`).join(" L")}`;
-  const Icon = ({type}) => type === "hotel" ? <House className="h-3.5 w-3.5"/> : type === "park" ? <Trees className="h-3.5 w-3.5"/> : type === "landmark" ? <Landmark className="h-3.5 w-3.5"/> : <MapPin className="h-3.5 w-3.5"/>;
-  return <section className="route-sketch-card" style={{
-    "--route-outbound":c.outbound,"--route-return":c.return,"--route-river":c.river,
-    "--route-paper":c.paper,"--route-text":c.text,"--route-muted":c.muted
-  }} aria-label="ROUTE SKETCH / 上野浅草城市河岸闭环示意">
-    <div className="route-sketch-header">
-      <div><p>ROUTE SKETCH</p><h3>城市 × 河岸闭环示意</h3></div><RouteLegend />
-    </div>
-    <div className="route-sketch-canvas relative min-h-[560px] overflow-hidden" role="img" aria-label="两国酒店出发，经藏前、稻荷町、上野公园、不忍池、浅草、雷门、吾妻桥、厩桥和两国桥返回酒店的概念闭环示意">
-      <div className="absolute left-[31%] top-[12%] text-center"><p className="text-[9px] font-semibold tracking-[.16em] text-slate-400">NORTH · CITY</p><b className="text-sm text-slate-600">上野 · 台东区</b></div>
-      <div className="absolute right-[4%] top-[23%] text-center"><p className="text-[9px] font-semibold tracking-[.16em] text-slate-400">EAST · RIVER</p><b className="text-sm text-slate-600">浅草 · 隅田川</b></div>
-      <div className="absolute right-[8%] top-[39%] h-[49%] w-[20%] rounded-[48%] bg-sky-100/70"/>
-      <div className="absolute right-[15%] top-[56%] rotate-90 text-[9px] tracking-[.18em] text-sky-600/70">隅田川 · SUMIDA RIVER</div>
+  const outbound = [stops[0], stops[1], stops[2], stops[3], stops[4], stops[5], stops[6]];
+  const returning = [stops[6], stops[7], stops[8], stops[0]];
+  const pathD = arr => `M${arr.map(n => `${n.x * 10} ${n.y * 10}`).join(" L")}`;
+  const motionXY = arr => ({ cx: arr.map(n => n.x * 10), cy: arr.map(n => n.y * 10) });
+  return <section className="route-sketch-card" style={{"--route-outbound":c.outbound,"--route-return":c.return,"--route-river":c.river,"--route-paper":c.paper,"--route-text":c.text,"--route-muted":c.muted}} aria-label="ROUTE SKETCH / 上野浅草闭环示意">
+    <div className="route-sketch-header"><div><p>ROUTE SKETCH</p><h3>城市 × 河岸闭环示意</h3></div><RouteLegend /></div>
+    <div className="route-sketch-canvas relative min-h-[600px] overflow-hidden" role="img" aria-label="上野浅草城市与隅田川闭环示意">
+      <div className="absolute left-[28%] top-[10%] text-center"><p className="text-[9px] font-semibold tracking-[.16em] text-slate-400">NORTH · CITY</p><b className="text-sm text-slate-600">上野 · 台东区</b></div>
+      <div className="absolute right-[5%] top-[21%] text-center"><p className="text-[9px] font-semibold tracking-[.16em] text-slate-400">EAST · RIVER</p><b className="text-sm text-slate-600">浅草 · 隅田川</b></div>
+      <div className="absolute right-[6%] top-[34%] h-[55%] w-[18%] rounded-[48%] bg-sky-100/70" />
+      <div className="absolute right-[12%] top-[55%] rotate-90 text-[9px] tracking-[.18em] text-sky-600/70">隅田川 · SUMIDA RIVER</div>
       <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
-        <path d={pathD(outbound)} fill="none" stroke={c.outbound} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d={pathD(returning)} fill="none" stroke={c.return} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-        {nodes.map((n,i)=><circle key={i} cx={n.x*10} cy={n.y*10} r={i===0?10:7} fill={c.paper} stroke={i<7?c.outbound:c.return} strokeWidth="4"/>)}
-        <motion.circle r="6" fill={c.outbound} animate={pointList(outbound)} transition={{duration:11,repeat:Infinity,ease:"linear"}}/>
-        <motion.circle r="5" fill={c.return} animate={pointList(returning)} transition={{duration:7,repeat:Infinity,ease:"linear",delay:.8}}/>
+        <path d={pathD(outbound)} fill="none" stroke={c.outbound} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+        <path d={pathD(returning)} fill="none" stroke={c.return} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        {stops.map((n,i)=><circle key={i} cx={n.x*10} cy={n.y*10} r={i===0?10:7} fill={c.paper} stroke={i>=7?c.return:c.outbound} strokeWidth="4" />)}
+        <motion.circle r="6" fill={c.outbound} animate={motionXY(outbound)} transition={{duration:12,repeat:Infinity,ease:"linear"}} />
+        <motion.circle r="5" fill={c.return} animate={motionXY(returning)} transition={{duration:6,repeat:Infinity,ease:"linear",delay:.6}} />
       </svg>
-      {nodes.map((n,i)=><div key={n.title} className={`absolute flex items-start gap-1.5 ${n.side==="left"?"-translate-x-full pr-4 text-right flex-row-reverse":"pl-4 text-left"}`} style={{left:`${n.x}%`,top:`${n.y}%`,transform:`translateY(-50%) ${n.side==="left"?"translateX(-100%)":""}`}}>
-        <span className="mt-0.5 shrink-0" style={{color:n.icon==="hotel"?c.hotel:n.icon==="park"?c.tree:n.icon==="landmark"?c.bridge:c.muted}}><Icon type={n.icon}/></span>
-        <span className="whitespace-nowrap"><b className="block text-[13px] font-semibold text-slate-700">{n.title}</b><small className="block text-[9px] font-normal text-slate-400">{n.sub}</small></span>
+      {stops.map(({x,y,title,sub,icon:Icon,align}) => <div key={title} className={`absolute flex items-start gap-2 ${align === "left" ? "-translate-x-full -translate-y-1/2 pr-5 text-right flex-row-reverse" : "-translate-y-1/2 pl-5 text-left"}`} style={{left:`${x}%`,top:`${y}%`}}>
+        <Icon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#879487]" />
+        <span className="whitespace-nowrap"><b className="block text-[13px] font-semibold text-slate-700">{title}</b><small className="block text-[9px] font-normal text-slate-400">{sub}</small></span>
       </div>)}
-      <p className="absolute bottom-2 left-5 right-5 text-[10px] leading-relaxed text-slate-400">路线为城市、河岸与桥梁关系示意，非比例地图；灰绿表示城市去程，淡蓝表示沿河归程。</p>
+      <p className="absolute bottom-2 left-5 right-5 text-[10px] leading-relaxed text-slate-400">概念路线示意，非比例地图。城市段留于左侧，吾妻桥后进入右侧河岸轴线；灰绿为去程，淡蓝为归程。</p>
     </div>
   </section>;
 }

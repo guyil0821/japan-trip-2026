@@ -1,5 +1,5 @@
 import React from "react";
-import { CalendarDays, CheckSquare, Footprints, Map, MapPin, ReceiptText, ShoppingBag, Sparkles, Train, WalletCards } from "lucide-react";
+import { CalendarDays, CheckSquare, Cloud, CloudRain, CloudSnow, Footprints, Map, MapPin, ReceiptText, ShoppingBag, Sparkles, Sun, Train, WalletCards } from "lucide-react";
 import { daysUntilTrip, getTripStatus } from "../utils/tripStatus";
 import { days } from "../data/itinerary";
 import { dailyGuide } from "../data/dailyGuide";
@@ -50,12 +50,20 @@ function CountdownCard({ status, countdown, tripLength }) {
   </article>;
 }
 
-function NextStopCard({ day }) {
+function WeatherIcon({ description = "" }) {
+  const text = String(description).toLowerCase();
+  const Icon = /雪|snow/.test(text) ? CloudSnow : /雨|rain|shower/.test(text) ? CloudRain : /晴|clear|sun/.test(text) ? Sun : Cloud;
+  return <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />;
+}
+function NextStopCard({ day, weather, weatherLocation }) {
   return <article className="today-next-stop">
     <div className="flex items-center justify-between"><MapPin className="h-4 w-4 text-[#7d7657]" /><span className="text-[9px] font-bold text-[#9a9274]">{day?.date || "—"}</span></div>
     <p className="mt-2 text-[8px] font-bold tracking-[.12em] text-[#8f8768]">{day ? "NEXT STOP" : "ITINERARY"}</p>
     <strong className="today-story mt-0.5 block text-[17px] font-medium text-[#42534b]">{day?.city || "旅程安排"}</strong>
     <p className="mt-1 line-clamp-2 text-[9px] leading-4 text-[#887f63]">{day?.title || "查看行程，发现旅途细节。"}</p>
+    {weather?.data && <div className="mt-3 flex items-center gap-2 border-t border-[#b8ae89]/25 pt-2 text-[#6f765f]" aria-live="polite"><WeatherIcon description={weather.data.description} /><span className="text-[9px] font-medium">{weather.data.description}</span><span className="text-[11px] font-bold text-[#42534b]">{Math.round(weather.data.temperature)}°C</span></div>}
+    {weather?.loading && <div className="mt-3 border-t border-[#b8ae89]/25 pt-2 text-[8px] text-[#8f8768]">正在获取 {weatherLocation || day?.city} 天气…</div>}
+    {!weather?.loading && weather?.error && <div className="mt-3 border-t border-[#b8ae89]/25 pt-2 text-[8px] text-[#8f8768]">天气暂不可用</div>}
   </article>;
 }
 
@@ -91,7 +99,7 @@ export default function TodayPage({ setTab, grandTotal = 0, entryCount = 0 }) {
   return <section className="today-dashboard" aria-label="旅行总览">
     <div className="today-top-grid">
       <CountdownCard status={trip.status} countdown={daysUntilTrip()} tripLength={dayIndex + 1} />
-      <NextStopCard day={nextDay} />
+      <NextStopCard day={nextDay} weather={weather} weatherLocation={nextGuide?.weatherLocation} />
     </div>
 
     <ScenicHeader day={day || nextDay} date={day?.date || (trip.status === "after" ? "旅程回顾" : "即将启程")} />
@@ -102,8 +110,8 @@ export default function TodayPage({ setTab, grandTotal = 0, entryCount = 0 }) {
       </button>)}</div>
     </section>
 
-    {weather.data && <div className="flex flex-wrap items-center gap-2 px-1 text-xs text-[#61786c]" aria-live="polite"><span className="rounded-full border border-white/50 bg-white/30 px-3 py-1 backdrop-blur-sm">{guide?.weatherLocation} · {weather.data.description} · {Math.round(weather.data.temperature)}°</span><span className="text-[10px]">实况天气</span></div>}
-    {weather.loading && <p className="px-1 text-[10px] text-[#718078]">正在获取 {guide?.weatherLocation} 天气…</p>}
+    {weather.data && <div className="flex flex-wrap items-center gap-2 px-1 text-xs text-[#61786c]" aria-live="polite"><span className="rounded-full border border-white/50 bg-white/30 px-3 py-1 backdrop-blur-sm">{nextGuide?.weatherLocation} · {weather.data.description} · {Math.round(weather.data.temperature)}°</span><span className="text-[10px]">实况天气</span></div>}
+    {weather.loading && <p className="px-1 text-[10px] text-[#718078]">正在获取 {nextGuide?.weatherLocation} 天气…</p>}
 
     <div className="today-finance-grid">
       <RouteCard day={day || nextDay} />
