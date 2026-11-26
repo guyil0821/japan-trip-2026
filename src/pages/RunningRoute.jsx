@@ -234,42 +234,40 @@ const uenoAppleSearch = `https://maps.apple.com/?q=${encodeURIComponent(uenoStop
 
 function UenoRouteSketch() {
   const c = ROUTE_COLORS;
-  const stops = [
-    {x:70,y:88,title:"两国酒店",kana:"りょうごく",sub:"Hotel · 起点 / 终点",icon:House,lx:75,ly:88,anchor:"left"},
-    {x:70,y:76,title:"両国橋",kana:"りょうごくばし",sub:"Ryogoku Bridge",icon:MapPin,lx:61,ly:78,anchor:"right"},
-    {x:70,y:64,title:"厩橋",kana:"うまやばし",sub:"Umaya Bridge",icon:MapPin,lx:61,ly:65,anchor:"right"},
-    {x:70,y:52,title:"吾妻橋",kana:"あづまばし",sub:"Azuma Bridge",icon:MapPin,lx:61,ly:51,anchor:"right"},
-    {x:55,y:44,title:"稲荷町",kana:"いなりちょう",sub:"Inaricho",icon:MapPin,lx:58,ly:38,anchor:"left"},
-    {x:39,y:29,title:"上野公園",kana:"うえのこうえん",sub:"Ueno Park",icon:Trees,lx:34,ly:23,anchor:"right"},
-    {x:24,y:43,title:"不忍池",kana:"しのばずのいけ",sub:"Shinobazu Pond",icon:Trees,lx:17,ly:42,anchor:"right"},
-    {x:25,y:61,title:"浅草・雷門",kana:"あさくさ・かみなりもん",sub:"Asakusa · Kaminarimon",icon:Landmark,lx:17,ly:62,anchor:"right"},
-    {x:58,y:70,title:"蔵前",kana:"くらまえ",sub:"Kuramae",icon:MapPin,lx:51,ly:73,anchor:"right"},
+  const P = {
+    hotel:[76,82], kuramae:[76,70], umaya:[76,59], azuma:[76,43],
+    asakusa:[60,43], pond:[43,43], ueno:[43,27], inari:[60,27], ryogoku:[60,82]
+  };
+  const outward=[P.hotel,P.kuramae,P.inari,P.ueno,P.pond,P.asakusa,P.azuma];
+  const back=[P.azuma,P.umaya,P.kuramae,P.ryogoku,P.hotel];
+  const d=a=>`M${a.map(([x,y])=>`${x*10} ${y*10}`).join(" L")}`;
+  const xy=a=>({cx:a.map(([x])=>x*10),cy:a.map(([,y])=>y*10)});
+  const labels=[
+    {p:P.ueno,x:37,y:24,t:"上野公園",k:"うえのこうえん",e:"Ueno Park",Icon:Trees,side:"r"},
+    {p:P.pond,x:36,y:43,t:"不忍池",k:"しのばずのいけ",e:"Shinobazu Pond",Icon:Trees,side:"r"},
+    {p:P.asakusa,x:54,y:48,t:"浅草・雷門",k:"あさくさ・かみなりもん",e:"Asakusa · Kaminarimon",Icon:Landmark,side:"r"},
+    {p:P.inari,x:64,y:22,t:"稲荷町",k:"いなりちょう",e:"Inaricho",Icon:MapPin,side:"l"},
+    {p:P.azuma,x:80,y:38,t:"吾妻橋",k:"あづまばし",e:"Azuma Bridge",Icon:MapPin,side:"l"},
+    {p:P.umaya,x:80,y:56,t:"厩橋",k:"うまやばし",e:"Umaya Bridge",Icon:MapPin,side:"l"},
+    {p:P.kuramae,x:80,y:68,t:"蔵前",k:"くらまえ",e:"Kuramae",Icon:MapPin,side:"l"},
+    {p:P.ryogoku,x:54,y:86,t:"両国橋",k:"りょうごくばし",e:"Ryogoku Bridge",Icon:MapPin,side:"r"},
+    {p:P.hotel,x:80,y:82,t:"両国酒店",k:"りょうごく",e:"Hotel · 起点 / 终点",Icon:House,side:"l"},
   ];
-  const hotel=stops[0], ryogoku=stops[1], umaya=stops[2], azuma=stops[3], inari=stops[4], ueno=stops[5], pond=stops[6], asakusa=stops[7], kuramae=stops[8];
-  const outward=[hotel,kuramae,inari,ueno,pond,asakusa,azuma];
-  const back=[azuma,umaya,kuramae,ryogoku,hotel];
-  const d=a=>`M${a.map(n=>`${n.x*10} ${n.y*10}`).join(" L")}`;
-  const xy=a=>({cx:a.map(n=>n.x*10),cy:a.map(n=>n.y*10)});
   return <section className="route-sketch-card" style={{"--route-outbound":c.outbound,"--route-return":c.return,"--route-river":c.river,"--route-paper":c.paper,"--route-text":c.text,"--route-muted":c.muted}} aria-label="ROUTE SKETCH / 上野浅草闭环示意">
-    <div className="route-sketch-header"><div><p>ROUTE SKETCH</p><h3>城市 × 河岸闭环示意</h3></div><RouteLegend /></div>
-    <div className="route-sketch-canvas relative min-h-[860px] overflow-hidden" role="img" aria-label="上野浅草城市与隅田川闭环示意">
-      <div className="absolute left-[30%] top-[7%] text-center"><p className="text-[9px] font-semibold tracking-[.16em] text-slate-400">NORTH · CITY</p><b className="text-sm text-slate-600">上野 · 台东区</b></div>
-      <div className="absolute right-[3%] top-[17%] text-center"><p className="text-[9px] font-semibold tracking-[.16em] text-slate-400">EAST · RIVER</p><b className="text-sm text-slate-600">浅草 · 隅田川</b></div>
-      <div className="absolute right-[5%] top-[28%] h-[66%] w-[16%] rounded-[48%] bg-sky-100/70"/>
-      <div className="absolute right-[11%] top-[56%] rotate-90 text-[9px] tracking-[.18em] text-sky-600/70">隅田川 · SUMIDA RIVER</div>
+    <div className="route-sketch-header"><div><p>ROUTE SKETCH</p><h3>上野浅草闭环示意</h3></div><RouteLegend /></div>
+    <div className="route-sketch-canvas relative min-h-[540px] overflow-hidden" role="img" aria-label="上野浅草城市与隅田川闭环示意">
+      <div className="absolute left-[34%] top-[7%] text-center"><p className="text-[9px] font-semibold tracking-[.15em] text-slate-400">CITY LOOP</p><b className="text-sm text-slate-600">上野 · 浅草</b></div>
+      <div className="absolute right-[4%] top-[8%] text-center"><p className="text-[9px] font-semibold tracking-[.15em] text-slate-400">RIVER SIDE</p><b className="text-sm text-slate-600">隅田川</b></div>
+      <div className="absolute right-[8%] top-[19%] h-[70%] w-[13%] rounded-[48%] bg-sky-100/70"/>
+      <div className="absolute right-[13%] top-[48%] rotate-90 text-[8px] tracking-[.16em] text-sky-600/70">隅田川 · SUMIDA RIVER</div>
       <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
         <path d={d(outward)} fill="none" stroke={c.outbound} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
         <path d={d(back)} fill="none" stroke={c.return} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-        {stops.map((n,i)=><circle key={i} cx={n.x*10} cy={n.y*10} r={i===0?11:7} fill={c.paper} stroke={[hotel,ryogoku,umaya].includes(n)?c.return:c.outbound} strokeWidth="4"/>)}
-        {stops.map((n,i)=><line key={`lead-${i}`} x1={n.x*10} y1={n.y*10} x2={n.lx*10} y2={n.ly*10} stroke="#b7b09c" strokeWidth="1.2" strokeDasharray="3 4"/>)}
+        {[...Object.values(P)].map(([x,y],i)=><circle key={i} cx={x*10} cy={y*10} r="7" fill={c.paper} stroke={c.outbound} strokeWidth="4"/>)}
         <motion.circle r="6" fill={c.outbound} animate={xy(outward)} transition={{duration:13,repeat:Infinity,ease:"linear"}}/>
         <motion.circle r="5" fill={c.return} animate={xy(back)} transition={{duration:7,repeat:Infinity,ease:"linear",delay:.7}}/>
       </svg>
-      {stops.map(({title,kana,sub,icon:Icon,lx,ly,anchor})=><div key={title} className={`absolute flex items-start gap-2 ${anchor==="right"?"flex-row-reverse text-right":"text-left"}`} style={{left:`${lx}%`,top:`${ly}%`,transform:anchor==="right"?"translate(-100%,-50%)":"translate(0,-50%)"}}>
-        <Icon className="mt-1 h-3.5 w-3.5 shrink-0 text-[#879487]"/>
-        <span className="whitespace-nowrap rounded-lg bg-[#fbf7ed] px-2 py-1.5 shadow-[0_0_0_3px_rgba(251,247,237,.72)]"><b className="block text-[13px] font-semibold leading-tight text-slate-700">{title}</b><small className="mt-1 block text-[9px] font-medium leading-tight text-[#8d968c]">{kana}</small><small className="mt-1 block text-[9px] font-normal leading-tight text-slate-400">{sub}</small></span>
-      </div>)}
-      <p className="absolute bottom-2 left-5 right-5 text-[10px] leading-relaxed text-slate-400">概念路线示意，非比例地图。地名标签移出路线并使用虚线引导，避免文字遮挡线路。</p>
+      {labels.map(({x,y,t,k,e,Icon,side})=><div key={t} className={`absolute flex items-start gap-1.5 ${side==="r"?"flex-row-reverse text-right":"text-left"}`} style={{left:`${x}%`,top:`${y}%`,transform:side==="r"?"translate(-100%,-50%)":"translate(0,-50%)"}}><Icon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#879487]"/><span className="whitespace-nowrap"><b className="block text-[12px] font-semibold leading-tight text-slate-700">{t}</b><small className="mt-0.5 block text-[8px] font-medium text-[#8d968c]">{k}</small><small className="mt-0.5 block text-[8px] text-slate-400">{e}</small></span></div>)}
     </div>
   </section>;
 }
