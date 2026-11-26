@@ -28,6 +28,10 @@ export default function App() {
   const [tab, setTab] = useState("today");
   const [entries, setEntries] = useLocalStorage("sybil-japan-ledger", []);
   const grandTotal = entries.reduce((sum, entry) => sum + entryCny(entry), 0);
+  const shoppingActual = entries.reduce((sum, entry) => {
+    const isTripShopping = entry.phase === "trip" && ["购物", "伴手礼"].includes(entry.category);
+    return sum + (isTripShopping ? entryCny(entry) : 0);
+  }, 0);
   const [title, subtitle] = pageLabels[tab] || pageLabels.trip;
 
   return <div className="ios-app min-h-screen pb-28 text-slate-900">
@@ -50,7 +54,7 @@ export default function App() {
       <div className="ios-content">
         {tab === "trip" && <TripPage open={open} setOpen={setOpen} />}
         {tab === "run" && <RunningRoute />}
-        {tab === "budget" && <BudgetPage grandTotal={grandTotal} />}
+        {tab === "budget" && <BudgetPage grandTotal={grandTotal} shoppingActual={shoppingActual} />}
         {tab === "ledger" && <LedgerPage entries={entries} setEntries={setEntries} />}
         {tab === "transport" && <TransportPage />}
         {tab === "stay" && <StayPage setTab={setTab} />}
