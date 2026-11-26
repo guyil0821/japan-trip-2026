@@ -88,8 +88,9 @@ export default function TodayPage({ setTab, grandTotal = 0, entryCount = 0 }) {
   const dayIndex = trip.status === "during" ? days.findIndex(item => item.date === trip.itineraryDate) : -1;
   const day = dayIndex >= 0 ? days[dayIndex] : null;
   const guide = day ? dailyGuide[day.date] : null;
-  const weather = useWeather(guide, Boolean(guide));
   const nextDay = dayIndex >= 0 ? days[dayIndex + 1] || day : trip.status === "after" ? days[days.length - 1] : days[0];
+  const nextGuide = nextDay ? dailyGuide[nextDay.date] : null;
+  const weather = useWeather(nextGuide, Boolean(nextGuide));
   const spent = Number(grandTotal) || 0;
   const remaining = Math.max(0, totalBudget - spent);
   const budgetProgress = totalBudget > 0 ? Math.min(100, Math.max(0, (spent / totalBudget) * 100)) : 0;
@@ -110,8 +111,6 @@ export default function TodayPage({ setTab, grandTotal = 0, entryCount = 0 }) {
       </button>)}</div>
     </section>
 
-    {weather.data && <div className="flex flex-wrap items-center gap-2 px-1 text-xs text-[#61786c]" aria-live="polite"><span className="rounded-full border border-white/50 bg-white/30 px-3 py-1 backdrop-blur-sm">{nextGuide?.weatherLocation} · {weather.data.description} · {Math.round(weather.data.temperature)}°</span><span className="text-[10px]">实况天气</span></div>}
-    {weather.loading && <p className="px-1 text-[10px] text-[#718078]">正在获取 {nextGuide?.weatherLocation} 天气…</p>}
 
     <div className="today-finance-grid">
       <RouteCard day={day || nextDay} />
